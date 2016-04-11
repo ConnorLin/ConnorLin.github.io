@@ -17,14 +17,14 @@ Github PagesGithub Pages可以理解为用户编写的、托管在github上的�
 Github如果是程序员肯定知道，Github是开源代码库以及版本控制系统。在GitHub，用户可以十分轻易地找到海量的开源代码。
 Github PagesGithub Pages可以理解为用户编写的、托管在github上的静态网页，你只需将你的改动提交到Github，就可以实现更改你的网">
 <meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:02/download_Node.png">
-<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/blob/master/2016:04:02/download_git.png">
-<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/blob/master/2016:04:02/hexo_content.png">
-<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/blob/master/2016:04:02/hexo_server.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:02/download_git.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:02/hexo_content.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:02/hexo_server.png">
 <meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:02/create_github_repository.png">
 <meta property="og:image" content="https://help.github.com/assets/images/help/settings/userbar-account-settings.png">
 <meta property="og:image" content="https://help.github.com/assets/images/help/settings/settings-sidebar-ssh-keys.png">
 <meta property="og:image" content="https://help.github.com/assets/images/help/settings/ssh-key-paste.png">
-<meta property="og:updated_time" content="2016-04-11T15:44:02.000Z">
+<meta property="og:updated_time" content="2016-04-11T15:45:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Hexo＋Github Pages 来搭建免费的专属博客">
 <meta name="twitter:description" content="一、简介HexoHexo是一个开源的静态博客框架,基于node.js开发,作者是台湾大学生tommy351。
@@ -212,13 +212,13 @@ Github PagesGithub Pages可以理解为用户编写的、托管在github上的�
 <h4 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h4><p>如果是程序员肯定知道，<a href="https://github.com" target="_blank" rel="external">Github</a>是开源代码库以及版本控制系统。在GitHub，用户可以十分轻易地找到海量的开源代码。</p>
 <h4 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h4><p><a href="https://help.github.com/articles/what-are-github-pages/" target="_blank" rel="external">Github Pages</a>可以理解为用户编写的、托管在github上的静态网页，你只需将你的改动提交到Github，就可以实现更改你的网页。</p>
 <h3 id="二、基础环境配置"><a href="#二、基础环境配置" class="headerlink" title="二、基础环境配置"></a><strong>二、基础环境配置</strong></h3><h4 id="安装Node"><a href="#安装Node" class="headerlink" title="安装Node"></a>安装Node</h4><p>从<a href="https://nodejs.org/en/download/" target="_blank" rel="external">Node.js</a>官网下载对应的版本安装即可。<br><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:02/download_Node.png" alt=""></p>
-<h4 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h4><p>从<a href="https://git-scm.com/download/" target="_blank" rel="external">Git</a>官网下载对应版本安装即可。<br><img src="https://github.com/ConnorLin/BlogImages/blob/master/2016:04:02/download_git.png" alt=""></p>
+<h4 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h4><p>从<a href="https://git-scm.com/download/" target="_blank" rel="external">Git</a>官网下载对应版本安装即可。<br><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:02/download_git.png" alt=""></p>
 <h4 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h4><p>Node和Git都安装完毕后，在任意路径下新建一个文件夹(随意命名)，如Hexo，作为你的博客专属路径，用于存放Hexo相关配置信息，之后终端进入到此路径并分别执行如下命令来安装和初始化Hexo<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install-g hexo</span><br><span class="line">hexo init</span><br></pre></td></tr></table></figure></p>
 <p>至此，可以使用Hexo了，我们来实验一下。</p>
 <p>分别执行如下命令来生成一个静态网页并启动本地服务来预览你的初始博客，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br><span class="line">hexo server</span><br></pre></td></tr></table></figure></p>
 <p>或者简写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure></p>
-<p>初始化后文件结构如图：<br><img src="https://github.com/ConnorLin/BlogImages/blob/master/2016:04:02/hexo_content.png" alt=""></p>
-<p>如图，启动本地服务后，即可在浏览器输入<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 来预览博客啦！<br><img src="https://github.com/ConnorLin/BlogImages/blob/master/2016:04:02/hexo_server.png" alt=""></p>
+<p>初始化后文件结构如图：<br><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:02/hexo_content.png" alt=""></p>
+<p>如图，启动本地服务后，即可在浏览器输入<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 来预览博客啦！<br><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:02/hexo_server.png" alt=""></p>
 <h3 id="三、配置GitHub"><a href="#三、配置GitHub" class="headerlink" title="三、配置GitHub"></a>三、配置GitHub</h3><p>首先你得有个Github帐号，到<a href="https://github.com" target="_blank" rel="external">https://github.com</a> 上注册个帐号，至于如何注册，相信你会的。</p>
 <h4 id="绑定Git-amp-Github"><a href="#绑定Git-amp-Github" class="headerlink" title="绑定Git &amp; Github"></a>绑定Git &amp; Github</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//Github用户名</span><br><span class="line">git config --global user.name &quot;ConnorLin&quot;</span><br><span class="line">//注册Github的邮箱</span><br><span class="line">git config --global user.email  &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure>
 <h4 id="创建博客仓库"><a href="#创建博客仓库" class="headerlink" title="创建博客仓库"></a>创建博客仓库</h4><p>注册帐号后，点➕来创建一个repository，该仓库必须以 <strong>“your_user_name.github.io”</strong> 的格式命名<br><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:02/create_github_repository.png" alt=""></p>
