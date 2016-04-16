@@ -310,8 +310,7 @@
 
       
         
-          
-            <h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a><strong>写在前面</strong></h4><p>前几天，开发中遇到一个问题，Log信息如下：</p>
+          <h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a><strong>写在前面</strong></h4><p>前几天，开发中遇到一个问题，Log信息如下：</p>
 <pre><code>E/AndroidRuntime(10943): FATAL EXCEPTION: main
 E/AndroidRuntime(10943): Process: com.freeme.gallery, PID: 10943
 E/AndroidRuntime(10943): java.lang.NoClassDefFoundError: com.freeme.gallery.data.DataManager$DateTakenComparator
@@ -333,158 +332,12 @@ E/AndroidRuntime(10943):     at java.lang.reflect.Method.invoke(Method.java:515)
 E/AndroidRuntime(10943):     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:835)
 E/AndroidRuntime(10943):     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:651)
 E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
-</code></pre><p>从报错信息来看，是没有找到<code>DateTakenComparator</code>这个内部类且又是运行时异常，那是不是和ClassLoader有关系呢?<br>那么首先排除代码原因，开始从Gradle和Gradle插件版本入手，通过改变版本来验证。然而验证下来发现与Gradle并没关系。  </p>
-<p>那么问题到底出在哪呢？<br>没辙！于是开始按节点排查，排查过几个关键节点后，终于得出一个结论：<strong>引入某个特定library后就会报这个错</strong>。  </p>
-<p>然而这个library是直接从Maven导入的，library本身肯定没有问题。似乎到这里线索又断了…恰逢此时，同事建议看下apk包大小。不看不知道，看过才恍然大悟，apk内大有乾坤啊。  </p>
-<p>apk包中含有两个<code>.dex</code>文件：<code>classes.dex</code>和<code>classes2.dex</code>，再看<code>java.lang.NoClassDefFoundError</code>，结果显而易见，方法数超限了！但是已经在build.gradle中配置了<code>multiDexEnabled true</code>和添加了<code>android.support.multidex</code>，为何还会出错呢？ 原来是忘了继承<code>MultiDexApplication</code>了！敲脑袋ing…</p>
-<p>接下来，我们借助官方文档来了解下64K方法数限制。</p>
-<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a><strong>正文</strong></h3><p>随着应用不断增加新功能，引入新库，apk会越来越大，到达一定规模后就可能遇到方法数超限问题。<br>早期版本错误信息如下：  </p>
-<pre><code>Conversion to Dalvik format failed:
-Unable to execute dex: method ID not in [0, 0xffff]: 65536
-</code></pre><p>较新版本错误信息如下：  </p>
-<pre><code>trouble writing output:
-Too many field references: 131000; max is 65536.
-You may try using --multi-dex option.
-</code></pre><p>其中数字<code>65536</code>是关键，Android平台的Java虚拟机Dalvik执行Dex程序时，使用的是short类型来索引DEX文件中的方法。这就意味着单个Dex文件可被引用的方法总数被限制为<code>64x1024</code>, 即<code>65536</code>。其中包括:  </p>
-<ul>
-<li>Android Framework的方法</li>
-<li>library的方法</li>
-<li>我们自己写的方法</li>
-</ul>
-<p>为突破这个限制，需要使用multidex来生成多个dex文件。</p>
-<h4 id="Android5-0-API-level-21-之前版本支持Multidex"><a href="#Android5-0-API-level-21-之前版本支持Multidex" class="headerlink" title="Android5.0 (API level 21)之前版本支持Multidex"></a><strong>Android5.0 (API level 21)之前版本支持Multidex</strong></h4><p>Android5.0之前使用Dalvik运行时执行应用代码，默认Dalvik限制每个apk只能有一个字节码<code>classed.dex</code>文件。为突破这个限制，可以使用<a href="https://developer.android.com/tools/support-library/features.html#multidex" target="_blank" rel="external">multidex support library</a>来管理额外的dex文件(包括代码)。</p>
-<h4 id="Android5-0及更高版本支持Multidex"><a href="#Android5-0及更高版本支持Multidex" class="headerlink" title="Android5.0及更高版本支持Multidex"></a><strong>Android5.0及更高版本支持Multidex</strong></h4><p>Android5.0及更高版本使用支持从apk中加载多个dex文件的ART运行时机制，在应用安装时，加载classed(…N).dex文件并编译成一个<code>.oat</code>文件以支持在Android设备上运行。关于Android 5.0运行时详见<a href="https://source.android.com/devices/tech/dalvik/art.html" target="_blank" rel="external">ART介绍</a>。</p>
-<blockquote>
-<p>Note: While using <a href="https://developer.android.com/tools/building/building-studio.html#instant-run" target="_blank" rel="external">Instant Run</a>, Android Studio automatically configures your app for multidex when your app’s minSdkVersion is set to 21 or higher. Because Instant Run only works with the debug version of your app, you still need to configure your release build for multidex to avoid the 64K limit.</p>
-</blockquote>
-<p>如果使用<a href="https://developer.android.com/tools/building/building-studio.html#instant-run" target="_blank" rel="external">Instant Run</a>，当app的<code>minSdkVersion</code>大于或等于<code>21</code>时，Android Studio会自动配置支持multidex，但是仅<code>debug</code>版本有效，<code>release</code>版仍然需要配置multidex来突破64K限制。</p>
-<h4 id="避免64K限制"><a href="#避免64K限制" class="headerlink" title="避免64K限制"></a><strong>避免64K限制</strong></h4><p>在配置multidex之前，你或许可以通过以下方法来减小方法总数(包括引用的、library里的和自己写的方法)。</p>
-<ul>
-<li><strong>排除未使用的依赖</strong> -此步骤通常能有效避免64K限制。</li>
-<li><strong>使用ProGuard去除未使用的方法</strong> -为release版本配置<a href="https://developer.android.com/tools/help/proguard.html" target="_blank" rel="external">ProGuard</a>，能有效排除一些无用方法</li>
-</ul>
-<p>使用以上技术能有效避免更改构建配置来引用更多的方法，同时能减小apk大小，使用户消耗更少的流量。</p>
-<h4 id="使用Gradle配置Multidex"><a href="#使用Gradle配置Multidex" class="headerlink" title="使用Gradle配置Multidex"></a><strong>使用Gradle配置Multidex</strong></h4><p>Android SDK Build Tools 21.1或更高版本上支持multidex，确定要配置multidex前请确保<code>Android SDK Build Tools</code>和<code>Android Support Repository</code>更新到较新版本。  </p>
-<p>通过以下步骤配置multidex:</p>
-<ul>
-<li>更改Gradle配置来支持multidex</li>
-<li>修改manifest。使其支持multidexapplication类</li>
-</ul>
-<p><strong>修改模块级builde.gradle文件，修改如下:</strong></p>
-<pre><code>android {
-    compileSdkVersion 21
-    buildToolsVersion &quot;21.1.0&quot;
-
-    defaultConfig {
-        ...
-        minSdkVersion 14
-        targetSdkVersion 21
-        ...
-
-        // Enabling multidex support.
-        multiDexEnabled true
-    }
-    ...
-}
-
-dependencies {
-  compile &apos;com.android.support:multidex:1.0.0&apos;
-}
-</code></pre><p><strong>在manifest文件中，添加MultidexApplication Class的引用，如下:</strong></p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-    package=&quot;com.example.android.multidex.myapplication&quot;&gt;
-    &lt;application
-        ...
-        android:name=&quot;android.support.multidex.MultiDexApplication&quot;&gt;
-        ...
-    &lt;/application&gt;
-&lt;/manifest&gt;
-</code></pre><p>通过以上步骤即可支持multidex。</p>
-<blockquote>
-<p>Note: If your app uses extends the Application class, you can override the attachBaseContext() method and call MultiDex.install(this) to enable multidex. For more information, see the MultiDexApplication reference documentation.</p>
-</blockquote>
-<p>如果你的应用中已经继承Application，那么可以通过复写<code>attachBaseContext()</code>方法并调用<code>MultiDex.install(this)</code>来支持multidex，即无需修改manifest文件。更多信息请看<a href="https://developer.android.com/reference/android/support/multidex/MultiDexApplication.html" target="_blank" rel="external">MultiDexApplication</a></p>
-<p><strong>补充:</strong><br><strong>亦可直接将继承<code>Application</code> 改为继承<code>MultiDexApplication</code>，而无需修改manifest文件或复写<code>attachBaseContext()</code>方法。</strong></p>
-<h4 id="multidex-support-library的使用限制"><a href="#multidex-support-library的使用限制" class="headerlink" title="multidex support library的使用限制"></a><strong>multidex support library的使用限制</strong></h4><p><code>multidex support library</code>有一些已知的限制请务必知晓，需要在应用时先行测试。  </p>
-<ul>
-<li><p>如果classes2.dex文件较大，安装dex文件到设备的数据区是一个复杂的过程，可能会导致应用程序无响应(ANR)的错误。在这种情况下，应该使用ProGuard尽量减小dex文件的大小且删除无用的代码。  </p>
-</li>
-<li><p>在Android 4.0（API Level 14）之前，由于Dalvik linearalloc bug（问题<a href="http://b.android.com/22586" target="_blank" rel="external">22586</a>），multidex可能是运行失败。如果希望运行在Level 14之前的Android系统版本，请先确保完整的测试和使用。优化代码可以减少或可能消除这些潜在的问题。  </p>
-</li>
-<li><p>应用程序使用了multiedex配置，会造成申请很大的内存分配。可能还会引起Dalvik虚拟机的崩溃(问题<a href="http://b.android.com/78035" target="_blank" rel="external">78035</a>)。此分配限制是在Android 4.0 (API level 14)上增加的，但Android5.0 (API level 21)之前的版本仍有此限制。  </p>
-</li>
-<li><p>multidex构建工具不支持指定哪些类必须包含在首个dex文件中，因而可能导致某些library无法使用。  </p>
-</li>
-</ul>
-<h4 id="优化Multidex的开发和构建"><a href="#优化Multidex的开发和构建" class="headerlink" title="优化Multidex的开发和构建"></a><strong>优化Multidex的开发和构建</strong></h4><p>multidex会加长构建应用的时间，这个必要的过程可能会拖慢你的开发进度。<br>为加速构建过程，我们可以在Gradle中配置<a href="http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Product-flavors" target="_blank" rel="external">productFlavors</a>: <code>a development flavor and a production flavor</code>.</p>
-<p>开发时将<code>minSdkVersion</code>改为<code>21</code>使用ART运行时机制，这样能加快构建速度。release时改为合适的<code>minSdkVersion</code>，这样仅在release时费时较长。</p>
-<p>build.gradle配置如下:</p>
-<pre><code>android {
-    productFlavors {
-        // Define separate dev and prod product flavors.
-        dev {
-            // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
-            // to pre-dex each module and produce an APK that can be tested on
-            // Android Lollipop without time consuming dex merging processes.
-            minSdkVersion 21
-        }
-        prod {
-            // The actual minSdkVersion for the application.
-            minSdkVersion 14
-        }
-    }
-          ...
-    buildTypes {
-        release {
-            runProguard true
-            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;),
-                                                 &apos;proguard-rules.pro&apos;
-        }
-    }
-}
-dependencies {
-  compile &apos;com.android.support:multidex:1.0.0&apos;
-}
-</code></pre><p>完成上述配置后，你可以使用结合了<code>dev productFlavor</code>和<code>buildType</code>属性的<code>devDebug</code>变体app。<br>这个变体app包含如下特性:</p>
-<ul>
-<li>关闭了混淆(proguard)</li>
-<li>支持multidex</li>
-<li>minSdkVersion 设置为 Android API level 21.</li>
-</ul>
-<p>这些设置将使Gradle插件做如下事情:</p>
-<ol>
-<li>编译应用的每个模块(包括依赖)为独立的dex文件，这个过程称为<code>pre-dexing</code></li>
-<li>不作修改地include每个dex文件到apk里</li>
-<li>更重要的是，这些模块dex文件将不会合并，这样避免分割主dex文件，以加快速度</li>
-</ol>
-<p>值得注意的是：<strong>上述配置后的devDebug变种app仅能运行在Android 5.0设备上</strong>。  </p>
-<p>同时，你也可以构建其他变体app，也可以在终端使用gradel命令来实现多渠道打包等。更多有关<code>flavors</code>和<code>Gradle tasks</code>信息, 请看<a href="http://avatarqing.github.io/Gradle-Plugin-User-Guide-Chinese-Verision" target="_blank" rel="external">Gradle Plugin User Guide(中文翻译)</a>.  </p>
-<h4 id="在Android-Studio中构建变种App"><a href="#在Android-Studio中构建变种App" class="headerlink" title="在Android Studio中构建变种App"></a><strong>在Android Studio中构建变种App</strong></h4><p>使用multidex时，构建变体app对管理构建过程是非常有用的。Android studio允许用户自己选择。  </p>
-<p>在Android Studio中构建变体app，步骤如下:  </p>
-<ol>
-<li>从左边栏打开<code>Build Variants</code>窗口</li>
-<li>点击<code>build variant</code>以选择不同变体，如图:<br><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:15/studio-build-variant.png" alt=""></li>
-</ol>
-<h4 id="测试Multidex应用"><a href="#测试Multidex应用" class="headerlink" title="测试Multidex应用"></a><strong>测试Multidex应用</strong></h4><p>测试multidex应用，需在<code>build.gradle</code>中配置<a href="https://developer.android.com/reference/com/android/test/runner/MultiDexTestRunner.html" target="_blank" rel="external">MultiDexTestRunner</a>:  </p>
-<pre><code>android {
-  defaultConfig {
-      ...
-      testInstrumentationRunner &quot;com.android.test.runner.MultiDexTestRunner&quot;
-  }
-}
-</code></pre><blockquote>
-<p>Note: With Android Plugin for Gradle versions lower than 1.1, you need to add the following dependency for multidex-instrumentation:</p>
-</blockquote>
-<p>若Gradle插件版本低于1.1，你还需添加<code>multidex-instrumentation</code>依赖:  </p>
-<pre><code>dependencies {
-    androidTestCompile(&apos;com.android.support:multidex-instrumentation:1.0.1&apos;) {
-         exclude group: &apos;com.android.support&apos;, module: &apos;multidex&apos;
-    }
-}
-</code></pre><p><strong>备注：文中链接为官方链接，请爬墙观看！</strong>  </p>
-
-          
+</code></pre>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/04/15/Android应用使用Multidex突破64K方法数限制/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>

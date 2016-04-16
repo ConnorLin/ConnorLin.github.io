@@ -95,7 +95,7 @@ E/AndroidRuntime(10943): FATAL EXCEPTION: main
 E/AndroidRuntime(10943): Process: com.freeme.gallery, PID: 10943
 E/AndroidRuntime(10943): java.lang.NoClassDefFoundError: com.">
 <meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:15/studio-build-variant.png">
-<meta property="og:updated_time" content="2016-04-16T07:26:20.000Z">
+<meta property="og:updated_time" content="2016-04-16T07:28:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android应用使用Multidex突破64K方法数限制">
 <meta name="twitter:description" content="写在前面前几天，开发中遇到一个问题，Log信息如下：
@@ -338,7 +338,8 @@ E/AndroidRuntime(10943):     at java.lang.reflect.Method.invoke(Method.java:515)
 E/AndroidRuntime(10943):     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:835)
 E/AndroidRuntime(10943):     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:651)
 E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
-</code></pre><p>从报错信息来看，是没有找到<code>DateTakenComparator</code>这个内部类且又是运行时异常，那是不是和ClassLoader有关系呢?<br>那么首先排除代码原因，开始从Gradle和Gradle插件版本入手，通过改变版本来验证。然而验证下来发现与Gradle并没关系。  </p>
+</code></pre><a id="more"></a>
+<p>从报错信息来看，是没有找到<code>DateTakenComparator</code>这个内部类且又是运行时异常，那是不是和ClassLoader有关系呢?<br>那么首先排除代码原因，开始从Gradle和Gradle插件版本入手，通过改变版本来验证。然而验证下来发现与Gradle并没关系。  </p>
 <p>那么问题到底出在哪呢？<br>没辙！于是开始按节点排查，排查过几个关键节点后，终于得出一个结论：<strong>引入某个特定library后就会报这个错</strong>。  </p>
 <p>然而这个library是直接从Maven导入的，library本身肯定没有问题。似乎到这里线索又断了…恰逢此时，同事建议看下apk包大小。不看不知道，看过才恍然大悟，apk内大有乾坤啊。  </p>
 <p>apk包中含有两个<code>.dex</code>文件：<code>classes.dex</code>和<code>classes2.dex</code>，再看<code>java.lang.NoClassDefFoundError</code>，结果显而易见，方法数超限了！但是已经在build.gradle中配置了<code>multiDexEnabled true</code>和添加了<code>android.support.multidex</code>，为何还会出错呢？ 原来是忘了继承<code>MultiDexApplication</code>了！敲脑袋ing…</p>
