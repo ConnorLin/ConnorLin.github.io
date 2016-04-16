@@ -100,7 +100,7 @@ Github PagesGithub Pages可以理解为用户编写的、托管在github上的�
 <meta property="og:image" content="https://help.github.com/assets/images/help/settings/userbar-account-settings.png">
 <meta property="og:image" content="https://help.github.com/assets/images/help/settings/settings-sidebar-ssh-keys.png">
 <meta property="og:image" content="https://help.github.com/assets/images/help/settings/ssh-key-paste.png">
-<meta property="og:updated_time" content="2016-04-14T05:58:13.000Z">
+<meta property="og:updated_time" content="2016-04-15T05:08:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Hexo＋Github Pages 来搭建免费的专属博客">
 <meta name="twitter:description" content="一、简介HexoHexo是一个开源的静态博客框架,基于node.js开发,作者是台湾大学生tommy351。
@@ -272,6 +272,25 @@ Github PagesGithub Pages可以理解为用户编写的、托管在github上的�
           </span>
 
           
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/教程/" itemprop="url" rel="index">
+                    <span itemprop="name">教程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
 
           
             
@@ -332,8 +351,7 @@ Github PagesGithub Pages可以理解为用户编写的、托管在github上的�
 <h4 id="将博客部署到Github"><a href="#将博客部署到Github" class="headerlink" title="将博客部署到Github"></a>将博客部署到Github</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
 <p>至此，在浏览器输入博客地址 <a href="http://connorlin.github.io" target="_blank" rel="external">http://connorlin.github.io</a>  就可以访问博客啦！</p>
 <h3 id="五、Hexo常用命令"><a href="#五、Hexo常用命令" class="headerlink" title="五、Hexo常用命令"></a><strong>五、Hexo常用命令</strong></h3><p>1、新建文章<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new [template] &quot;Title&quot;  //新建标题为Title的文章</span><br></pre></td></tr></table></figure></p>
-<pre><code>其中template是可选参数，我称之为文章模板，默认值为post。scaffolds路径下的文件就是模板文件，你可以新建或编辑现有模板。
-</code></pre><p>执行命令后，在source/_posts/下会生成Title.md文件，当然，也可以手动创建后缀为“.md”的文件，并用喜欢的markdown编辑器编辑。<br>本文使用作业部落的<strong><a href="https://www.zybuluo.com/" target="_blank" rel="external">Cmd MarkDown</a></strong>编写的。</p>
+<p>其中template是可选参数，我称之为文章模板，默认值为post。scaffolds路径下的文件就是模板文件，你可以新建或编辑现有模板。<br>执行命令后，在source/_posts/下会生成Title.md文件，当然，也可以手动创建后缀为“.md”的文件，并用喜欢的markdown编辑器编辑。</p>
 <p>2、新建页面<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">heox new page &quot;Page Title&quot;  //新建页面</span><br></pre></td></tr></table></figure></p>
 <p>3、生成静态页面至public目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate   //生成静态页面</span><br></pre></td></tr></table></figure></p>
 <p>4、本地预览<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server //启动本地服务，Ctrl＋C关闭</span><br></pre></td></tr></table></figure></p>
@@ -375,6 +393,20 @@ Github PagesGithub Pages可以理解为用户编写的、托管在github上的�
         </div>
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/15/Android应用使用Multidex突破64K方法数限制/" rel="prev" title="Android应用使用Multidex突破64K方法数限制">
+                Android应用使用Multidex突破64K方法数限制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -466,17 +498,24 @@ Github PagesGithub Pages可以理解为用户编写的、托管在github上的�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
 
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

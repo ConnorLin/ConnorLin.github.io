@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://github.com/ConnorLin/"/>
-  <updated>2016-04-14T05:58:13.000Z</updated>
+  <updated>2016-04-16T07:26:20.000Z</updated>
   <id>https://github.com/ConnorLin/</id>
   
   <author>
@@ -16,11 +16,206 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Android应用使用Multidex突破64K方法数限制</title>
+    <link href="https://github.com/ConnorLin/2016/04/15/Android%E5%BA%94%E7%94%A8%E4%BD%BF%E7%94%A8Multidex%E7%AA%81%E7%A0%B464K%E6%96%B9%E6%B3%95%E6%95%B0%E9%99%90%E5%88%B6/"/>
+    <id>https://github.com/ConnorLin/2016/04/15/Android应用使用Multidex突破64K方法数限制/</id>
+    <published>2016-04-15T05:30:59.000Z</published>
+    <updated>2016-04-16T07:26:20.000Z</updated>
+    
+    <content type="html">&lt;h4 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;&lt;strong&gt;写在前面&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;前几天，开发中遇到一个问题，Log信息如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;E/AndroidRuntime(10943): FATAL EXCEPTION: main
+E/AndroidRuntime(10943): Process: com.freeme.gallery, PID: 10943
+E/AndroidRuntime(10943): java.lang.NoClassDefFoundError: com.freeme.gallery.data.DataManager$DateTakenComparator
+E/AndroidRuntime(10943):     at com.freeme.gallery.data.DataManager.&amp;lt;clinit&amp;gt;(DataManager.java:65)
+E/AndroidRuntime(10943):     at com.freeme.gallery.app.GalleryAppImpl.getDataManager(GalleryAppImpl.java:77)
+E/AndroidRuntime(10943):     at com.freeme.gallery.provider.GalleryProvider.onCreate(GalleryProvider.java:101)
+E/AndroidRuntime(10943):     at android.content.ContentProvider.attachInfo(ContentProvider.java:1656)
+E/AndroidRuntime(10943):     at android.content.ContentProvider.attachInfo(ContentProvider.java:1627)
+E/AndroidRuntime(10943):     at android.app.ActivityThread.installProvider(ActivityThread.java:5060)
+E/AndroidRuntime(10943):     at android.app.ActivityThread.installContentProviders(ActivityThread.java:4634)
+E/AndroidRuntime(10943):     at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4567)
+E/AndroidRuntime(10943):     at android.app.ActivityThread.access$1500(ActivityThread.java:153)
+E/AndroidRuntime(10943):     at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1404)
+E/AndroidRuntime(10943):     at android.os.Handler.dispatchMessage(Handler.java:110)
+E/AndroidRuntime(10943):     at android.os.Looper.loop(Looper.java:193)
+E/AndroidRuntime(10943):     at android.app.ActivityThread.main(ActivityThread.java:5351)
+E/AndroidRuntime(10943):     at java.lang.reflect.Method.invokeNative(Native Method)
+E/AndroidRuntime(10943):     at java.lang.reflect.Method.invoke(Method.java:515)
+E/AndroidRuntime(10943):     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:835)
+E/AndroidRuntime(10943):     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:651)
+E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;从报错信息来看，是没有找到&lt;code&gt;DateTakenComparator&lt;/code&gt;这个内部类且又是运行时异常，那是不是和ClassLoader有关系呢?&lt;br&gt;那么首先排除代码原因，开始从Gradle和Gradle插件版本入手，通过改变版本来验证。然而验证下来发现与Gradle并没关系。  &lt;/p&gt;
+&lt;p&gt;那么问题到底出在哪呢？&lt;br&gt;没辙！于是开始按节点排查，排查过几个关键节点后，终于得出一个结论：&lt;strong&gt;引入某个特定library后就会报这个错&lt;/strong&gt;。  &lt;/p&gt;
+&lt;p&gt;然而这个library是直接从Maven导入的，library本身肯定没有问题。似乎到这里线索又断了…恰逢此时，同事建议看下apk包大小。不看不知道，看过才恍然大悟，apk内大有乾坤啊。  &lt;/p&gt;
+&lt;p&gt;apk包中含有两个&lt;code&gt;.dex&lt;/code&gt;文件：&lt;code&gt;classes.dex&lt;/code&gt;和&lt;code&gt;classes2.dex&lt;/code&gt;，再看&lt;code&gt;java.lang.NoClassDefFoundError&lt;/code&gt;，结果显而易见，方法数超限了！但是已经在build.gradle中配置了&lt;code&gt;multiDexEnabled true&lt;/code&gt;和添加了&lt;code&gt;android.support.multidex&lt;/code&gt;，为何还会出错呢？ 原来是忘了继承&lt;code&gt;MultiDexApplication&lt;/code&gt;了！敲脑袋ing…&lt;/p&gt;
+&lt;p&gt;接下来，我们借助官方文档来了解下64K方法数限制。&lt;/p&gt;
+&lt;h3 id=&quot;正文&quot;&gt;&lt;a href=&quot;#正文&quot; class=&quot;headerlink&quot; title=&quot;正文&quot;&gt;&lt;/a&gt;&lt;strong&gt;正文&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;随着应用不断增加新功能，引入新库，apk会越来越大，到达一定规模后就可能遇到方法数超限问题。&lt;br&gt;早期版本错误信息如下：  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Conversion to Dalvik format failed:
+Unable to execute dex: method ID not in [0, 0xffff]: 65536
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;较新版本错误信息如下：  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;trouble writing output:
+Too many field references: 131000; max is 65536.
+You may try using --multi-dex option.
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中数字&lt;code&gt;65536&lt;/code&gt;是关键，Android平台的Java虚拟机Dalvik执行Dex程序时，使用的是short类型来索引DEX文件中的方法。这就意味着单个Dex文件可被引用的方法总数被限制为&lt;code&gt;64x1024&lt;/code&gt;, 即&lt;code&gt;65536&lt;/code&gt;。其中包括:  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Android Framework的方法&lt;/li&gt;
+&lt;li&gt;library的方法&lt;/li&gt;
+&lt;li&gt;我们自己写的方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;为突破这个限制，需要使用multidex来生成多个dex文件。&lt;/p&gt;
+&lt;h4 id=&quot;Android5-0-API-level-21-之前版本支持Multidex&quot;&gt;&lt;a href=&quot;#Android5-0-API-level-21-之前版本支持Multidex&quot; class=&quot;headerlink&quot; title=&quot;Android5.0 (API level 21)之前版本支持Multidex&quot;&gt;&lt;/a&gt;&lt;strong&gt;Android5.0 (API level 21)之前版本支持Multidex&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Android5.0之前使用Dalvik运行时执行应用代码，默认Dalvik限制每个apk只能有一个字节码&lt;code&gt;classed.dex&lt;/code&gt;文件。为突破这个限制，可以使用&lt;a href=&quot;https://developer.android.com/tools/support-library/features.html#multidex&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;multidex support library&lt;/a&gt;来管理额外的dex文件(包括代码)。&lt;/p&gt;
+&lt;h4 id=&quot;Android5-0及更高版本支持Multidex&quot;&gt;&lt;a href=&quot;#Android5-0及更高版本支持Multidex&quot; class=&quot;headerlink&quot; title=&quot;Android5.0及更高版本支持Multidex&quot;&gt;&lt;/a&gt;&lt;strong&gt;Android5.0及更高版本支持Multidex&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Android5.0及更高版本使用支持从apk中加载多个dex文件的ART运行时机制，在应用安装时，加载classed(…N).dex文件并编译成一个&lt;code&gt;.oat&lt;/code&gt;文件以支持在Android设备上运行。关于Android 5.0运行时详见&lt;a href=&quot;https://source.android.com/devices/tech/dalvik/art.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;ART介绍&lt;/a&gt;。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note: While using &lt;a href=&quot;https://developer.android.com/tools/building/building-studio.html#instant-run&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Instant Run&lt;/a&gt;, Android Studio automatically configures your app for multidex when your app’s minSdkVersion is set to 21 or higher. Because Instant Run only works with the debug version of your app, you still need to configure your release build for multidex to avoid the 64K limit.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果使用&lt;a href=&quot;https://developer.android.com/tools/building/building-studio.html#instant-run&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Instant Run&lt;/a&gt;，当app的&lt;code&gt;minSdkVersion&lt;/code&gt;大于或等于&lt;code&gt;21&lt;/code&gt;时，Android Studio会自动配置支持multidex，但是仅&lt;code&gt;debug&lt;/code&gt;版本有效，&lt;code&gt;release&lt;/code&gt;版仍然需要配置multidex来突破64K限制。&lt;/p&gt;
+&lt;h4 id=&quot;避免64K限制&quot;&gt;&lt;a href=&quot;#避免64K限制&quot; class=&quot;headerlink&quot; title=&quot;避免64K限制&quot;&gt;&lt;/a&gt;&lt;strong&gt;避免64K限制&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;在配置multidex之前，你或许可以通过以下方法来减小方法总数(包括引用的、library里的和自己写的方法)。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;排除未使用的依赖&lt;/strong&gt; -此步骤通常能有效避免64K限制。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;使用ProGuard去除未使用的方法&lt;/strong&gt; -为release版本配置&lt;a href=&quot;https://developer.android.com/tools/help/proguard.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;ProGuard&lt;/a&gt;，能有效排除一些无用方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用以上技术能有效避免更改构建配置来引用更多的方法，同时能减小apk大小，使用户消耗更少的流量。&lt;/p&gt;
+&lt;h4 id=&quot;使用Gradle配置Multidex&quot;&gt;&lt;a href=&quot;#使用Gradle配置Multidex&quot; class=&quot;headerlink&quot; title=&quot;使用Gradle配置Multidex&quot;&gt;&lt;/a&gt;&lt;strong&gt;使用Gradle配置Multidex&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Android SDK Build Tools 21.1或更高版本上支持multidex，确定要配置multidex前请确保&lt;code&gt;Android SDK Build Tools&lt;/code&gt;和&lt;code&gt;Android Support Repository&lt;/code&gt;更新到较新版本。  &lt;/p&gt;
+&lt;p&gt;通过以下步骤配置multidex:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;更改Gradle配置来支持multidex&lt;/li&gt;
+&lt;li&gt;修改manifest。使其支持multidexapplication类&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;修改模块级builde.gradle文件，修改如下:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;android {
+    compileSdkVersion 21
+    buildToolsVersion &amp;quot;21.1.0&amp;quot;
+
+    defaultConfig {
+        ...
+        minSdkVersion 14
+        targetSdkVersion 21
+        ...
+
+        // Enabling multidex support.
+        multiDexEnabled true
+    }
+    ...
+}
+
+dependencies {
+  compile &amp;apos;com.android.support:multidex:1.0.0&amp;apos;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;在manifest文件中，添加MultidexApplication Class的引用，如下:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;manifest xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
+    package=&amp;quot;com.example.android.multidex.myapplication&amp;quot;&amp;gt;
+    &amp;lt;application
+        ...
+        android:name=&amp;quot;android.support.multidex.MultiDexApplication&amp;quot;&amp;gt;
+        ...
+    &amp;lt;/application&amp;gt;
+&amp;lt;/manifest&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;通过以上步骤即可支持multidex。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note: If your app uses extends the Application class, you can override the attachBaseContext() method and call MultiDex.install(this) to enable multidex. For more information, see the MultiDexApplication reference documentation.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;如果你的应用中已经继承Application，那么可以通过复写&lt;code&gt;attachBaseContext()&lt;/code&gt;方法并调用&lt;code&gt;MultiDex.install(this)&lt;/code&gt;来支持multidex，即无需修改manifest文件。更多信息请看&lt;a href=&quot;https://developer.android.com/reference/android/support/multidex/MultiDexApplication.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;MultiDexApplication&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;补充:&lt;/strong&gt;&lt;br&gt;&lt;strong&gt;亦可直接将继承&lt;code&gt;Application&lt;/code&gt; 改为继承&lt;code&gt;MultiDexApplication&lt;/code&gt;，而无需修改manifest文件或复写&lt;code&gt;attachBaseContext()&lt;/code&gt;方法。&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&quot;multidex-support-library的使用限制&quot;&gt;&lt;a href=&quot;#multidex-support-library的使用限制&quot; class=&quot;headerlink&quot; title=&quot;multidex support library的使用限制&quot;&gt;&lt;/a&gt;&lt;strong&gt;multidex support library的使用限制&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;&lt;code&gt;multidex support library&lt;/code&gt;有一些已知的限制请务必知晓，需要在应用时先行测试。  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;如果classes2.dex文件较大，安装dex文件到设备的数据区是一个复杂的过程，可能会导致应用程序无响应(ANR)的错误。在这种情况下，应该使用ProGuard尽量减小dex文件的大小且删除无用的代码。  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在Android 4.0（API Level 14）之前，由于Dalvik linearalloc bug（问题&lt;a href=&quot;http://b.android.com/22586&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;22586&lt;/a&gt;），multidex可能是运行失败。如果希望运行在Level 14之前的Android系统版本，请先确保完整的测试和使用。优化代码可以减少或可能消除这些潜在的问题。  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;应用程序使用了multiedex配置，会造成申请很大的内存分配。可能还会引起Dalvik虚拟机的崩溃(问题&lt;a href=&quot;http://b.android.com/78035&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;78035&lt;/a&gt;)。此分配限制是在Android 4.0 (API level 14)上增加的，但Android5.0 (API level 21)之前的版本仍有此限制。  &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;multidex构建工具不支持指定哪些类必须包含在首个dex文件中，因而可能导致某些library无法使用。  &lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;优化Multidex的开发和构建&quot;&gt;&lt;a href=&quot;#优化Multidex的开发和构建&quot; class=&quot;headerlink&quot; title=&quot;优化Multidex的开发和构建&quot;&gt;&lt;/a&gt;&lt;strong&gt;优化Multidex的开发和构建&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;multidex会加长构建应用的时间，这个必要的过程可能会拖慢你的开发进度。&lt;br&gt;为加速构建过程，我们可以在Gradle中配置&lt;a href=&quot;http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Product-flavors&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;productFlavors&lt;/a&gt;: &lt;code&gt;a development flavor and a production flavor&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;开发时将&lt;code&gt;minSdkVersion&lt;/code&gt;改为&lt;code&gt;21&lt;/code&gt;使用ART运行时机制，这样能加快构建速度。release时改为合适的&lt;code&gt;minSdkVersion&lt;/code&gt;，这样仅在release时费时较长。&lt;/p&gt;
+&lt;p&gt;build.gradle配置如下:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;android {
+    productFlavors {
+        // Define separate dev and prod product flavors.
+        dev {
+            // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
+            // to pre-dex each module and produce an APK that can be tested on
+            // Android Lollipop without time consuming dex merging processes.
+            minSdkVersion 21
+        }
+        prod {
+            // The actual minSdkVersion for the application.
+            minSdkVersion 14
+        }
+    }
+          ...
+    buildTypes {
+        release {
+            runProguard true
+            proguardFiles getDefaultProguardFile(&amp;apos;proguard-android.txt&amp;apos;),
+                                                 &amp;apos;proguard-rules.pro&amp;apos;
+        }
+    }
+}
+dependencies {
+  compile &amp;apos;com.android.support:multidex:1.0.0&amp;apos;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;完成上述配置后，你可以使用结合了&lt;code&gt;dev productFlavor&lt;/code&gt;和&lt;code&gt;buildType&lt;/code&gt;属性的&lt;code&gt;devDebug&lt;/code&gt;变体app。&lt;br&gt;这个变体app包含如下特性:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;关闭了混淆(proguard)&lt;/li&gt;
+&lt;li&gt;支持multidex&lt;/li&gt;
+&lt;li&gt;minSdkVersion 设置为 Android API level 21.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这些设置将使Gradle插件做如下事情:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;编译应用的每个模块(包括依赖)为独立的dex文件，这个过程称为&lt;code&gt;pre-dexing&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;不作修改地include每个dex文件到apk里&lt;/li&gt;
+&lt;li&gt;更重要的是，这些模块dex文件将不会合并，这样避免分割主dex文件，以加快速度&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;值得注意的是：&lt;strong&gt;上述配置后的devDebug变种app仅能运行在Android 5.0设备上&lt;/strong&gt;。  &lt;/p&gt;
+&lt;p&gt;同时，你也可以构建其他变体app，也可以在终端使用gradel命令来实现多渠道打包等。更多有关&lt;code&gt;flavors&lt;/code&gt;和&lt;code&gt;Gradle tasks&lt;/code&gt;信息, 请看&lt;a href=&quot;http://avatarqing.github.io/Gradle-Plugin-User-Guide-Chinese-Verision&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Gradle Plugin User Guide(中文翻译)&lt;/a&gt;.  &lt;/p&gt;
+&lt;h4 id=&quot;在Android-Studio中构建变种App&quot;&gt;&lt;a href=&quot;#在Android-Studio中构建变种App&quot; class=&quot;headerlink&quot; title=&quot;在Android Studio中构建变种App&quot;&gt;&lt;/a&gt;&lt;strong&gt;在Android Studio中构建变种App&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;使用multidex时，构建变体app对管理构建过程是非常有用的。Android studio允许用户自己选择。  &lt;/p&gt;
+&lt;p&gt;在Android Studio中构建变体app，步骤如下:  &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;从左边栏打开&lt;code&gt;Build Variants&lt;/code&gt;窗口&lt;/li&gt;
+&lt;li&gt;点击&lt;code&gt;build variant&lt;/code&gt;以选择不同变体，如图:&lt;br&gt;&lt;img src=&quot;https://github.com/ConnorLin/BlogImages/raw/master/2016:04:15/studio-build-variant.png&quot; alt=&quot;&quot;&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&quot;测试Multidex应用&quot;&gt;&lt;a href=&quot;#测试Multidex应用&quot; class=&quot;headerlink&quot; title=&quot;测试Multidex应用&quot;&gt;&lt;/a&gt;&lt;strong&gt;测试Multidex应用&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;测试multidex应用，需在&lt;code&gt;build.gradle&lt;/code&gt;中配置&lt;a href=&quot;https://developer.android.com/reference/com/android/test/runner/MultiDexTestRunner.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;MultiDexTestRunner&lt;/a&gt;:  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;android {
+  defaultConfig {
+      ...
+      testInstrumentationRunner &amp;quot;com.android.test.runner.MultiDexTestRunner&amp;quot;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;Note: With Android Plugin for Gradle versions lower than 1.1, you need to add the following dependency for multidex-instrumentation:&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;若Gradle插件版本低于1.1，你还需添加&lt;code&gt;multidex-instrumentation&lt;/code&gt;依赖:  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;dependencies {
+    androidTestCompile(&amp;apos;com.android.support:multidex-instrumentation:1.0.1&amp;apos;) {
+         exclude group: &amp;apos;com.android.support&amp;apos;, module: &amp;apos;multidex&amp;apos;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;备注：文中链接为官方链接，请爬墙观看！&lt;/strong&gt;  &lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;&lt;strong&gt;写在前面&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;前几天，开发中遇到一个问题，Log信息如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;E/Andro
+    
+    </summary>
+    
+      <category term="Android" scheme="https://github.com/ConnorLin/categories/Android/"/>
+    
+    
+      <category term="Android multidex 分包 NoClassDefFoundError" scheme="https://github.com/ConnorLin/tags/Android-multidex-%E5%88%86%E5%8C%85-NoClassDefFoundError/"/>
+    
+  </entry>
+  
+  <entry>
     <title>使用Hexo＋Github Pages 来搭建免费的专属博客</title>
     <link href="https://github.com/ConnorLin/2016/04/02/%E4%BD%BF%E7%94%A8Hexo%EF%BC%8BGithub%20Pages%20%E6%9D%A5%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E7%9A%84%E4%B8%93%E5%B1%9E%E5%8D%9A%E5%AE%A2/"/>
     <id>https://github.com/ConnorLin/2016/04/02/使用Hexo＋Github Pages 来搭建免费的专属博客/</id>
     <published>2016-04-02T14:33:20.000Z</published>
-    <updated>2016-04-14T05:58:13.000Z</updated>
+    <updated>2016-04-15T05:08:37.000Z</updated>
     
     <content type="html">&lt;h3 id=&quot;一、简介&quot;&gt;&lt;a href=&quot;#一、简介&quot; class=&quot;headerlink&quot; title=&quot;一、简介&quot;&gt;&lt;/a&gt;&lt;strong&gt;一、简介&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;Hexo&quot;&gt;&lt;a href=&quot;#Hexo&quot; class=&quot;headerlink&quot; title=&quot;Hexo&quot;&gt;&lt;/a&gt;Hexo&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;https://hexo.io/docs/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;是一个开源的静态博客框架,基于node.js开发,作者是台湾大学生tommy351。&lt;/p&gt;
 &lt;h4 id=&quot;Github&quot;&gt;&lt;a href=&quot;#Github&quot; class=&quot;headerlink&quot; title=&quot;Github&quot;&gt;&lt;/a&gt;Github&lt;/h4&gt;&lt;p&gt;如果是程序员肯定知道，&lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt;是开源代码库以及版本控制系统。在GitHub，用户可以十分轻易地找到海量的开源代码。&lt;/p&gt;
@@ -53,8 +248,7 @@
 &lt;h4 id=&quot;将博客部署到Github&quot;&gt;&lt;a href=&quot;#将博客部署到Github&quot; class=&quot;headerlink&quot; title=&quot;将博客部署到Github&quot;&gt;&lt;/a&gt;将博客部署到Github&lt;/h4&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;hexo deploy&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;p&gt;至此，在浏览器输入博客地址 &lt;a href=&quot;http://connorlin.github.io&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://connorlin.github.io&lt;/a&gt;  就可以访问博客啦！&lt;/p&gt;
 &lt;h3 id=&quot;五、Hexo常用命令&quot;&gt;&lt;a href=&quot;#五、Hexo常用命令&quot; class=&quot;headerlink&quot; title=&quot;五、Hexo常用命令&quot;&gt;&lt;/a&gt;&lt;strong&gt;五、Hexo常用命令&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;1、新建文章&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;hexo new [template] &amp;quot;Title&amp;quot;  //新建标题为Title的文章&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;其中template是可选参数，我称之为文章模板，默认值为post。scaffolds路径下的文件就是模板文件，你可以新建或编辑现有模板。
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;执行命令后，在source/_posts/下会生成Title.md文件，当然，也可以手动创建后缀为“.md”的文件，并用喜欢的markdown编辑器编辑。&lt;br&gt;本文使用作业部落的&lt;strong&gt;&lt;a href=&quot;https://www.zybuluo.com/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Cmd MarkDown&lt;/a&gt;&lt;/strong&gt;编写的。&lt;/p&gt;
+&lt;p&gt;其中template是可选参数，我称之为文章模板，默认值为post。scaffolds路径下的文件就是模板文件，你可以新建或编辑现有模板。&lt;br&gt;执行命令后，在source/_posts/下会生成Title.md文件，当然，也可以手动创建后缀为“.md”的文件，并用喜欢的markdown编辑器编辑。&lt;/p&gt;
 &lt;p&gt;2、新建页面&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;heox new page &amp;quot;Page Title&amp;quot;  //新建页面&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;3、生成静态页面至public目录&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;hexo generate   //生成静态页面&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;4、本地预览&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;hexo server //启动本地服务，Ctrl＋C关闭&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
@@ -80,6 +274,8 @@
 &lt;h4 id=&quot;Github-Pages&quot;&gt;&lt;a href=&quot;#Github-Pages&quot; class=&quot;headerlink&quot; title=&quot;Github Pages&quot;&gt;&lt;/a&gt;Github Pages&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;https://help.github.com/articles/what-are-github-pages/&quot;&gt;Github Pages&lt;/a&gt;可以理解为用户编写的、托管在github上的静态网页，你只需将你的改动提交到Github，就可以实现更改你的网页。&lt;/p&gt;
     
     </summary>
+    
+      <category term="教程" scheme="https://github.com/ConnorLin/categories/%E6%95%99%E7%A8%8B/"/>
     
     
       <category term="hexo GitHub Pages Git" scheme="https://github.com/ConnorLin/tags/hexo-GitHub-Pages-Git/"/>
