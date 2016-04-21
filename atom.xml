@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://github.com/ConnorLin/"/>
-  <updated>2016-04-16T07:28:18.000Z</updated>
+  <updated>2016-04-21T14:06:54.000Z</updated>
   <id>https://github.com/ConnorLin/</id>
   
   <author>
@@ -16,11 +16,337 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>你真的了解Android Notification吗?</title>
+    <link href="https://github.com/ConnorLin/2016/04/21/%E4%BD%A0%E7%9C%9F%E7%9A%84%E4%BA%86%E8%A7%A3Android-Notification%E5%90%97/"/>
+    <id>https://github.com/ConnorLin/2016/04/21/你真的了解Android-Notification吗/</id>
+    <published>2016-04-21T13:51:01.000Z</published>
+    <updated>2016-04-21T14:06:54.000Z</updated>
+    
+    <content type="html">&lt;p&gt;最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！&lt;/p&gt;
+&lt;h3 id=&quot;什么是通知-Notification&quot;&gt;&lt;a href=&quot;#什么是通知-Notification&quot; class=&quot;headerlink&quot; title=&quot;什么是通知(Notification)&quot;&gt;&lt;/a&gt;&lt;strong&gt;什么是通知(Notification)&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。&lt;br&gt;通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。&lt;/p&gt;
+&lt;p&gt;作为安卓用户界面的重要组成部分，通知有自己的设计指南。在Android 5.0(API level 21)中引入的 &lt;a href=&quot;http://developer.android.com/training/material/index.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Material Design&lt;/a&gt; 的变化是特别重要的，更多信息请阅读 &lt;a href=&quot;http://developer.android.com/design/patterns/notifications.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;通知设计指南&lt;/a&gt;。&lt;/p&gt;
+&lt;h3 id=&quot;如何创建通知&quot;&gt;&lt;a href=&quot;#如何创建通知&quot; class=&quot;headerlink&quot; title=&quot;如何创建通知&quot;&gt;&lt;/a&gt;&lt;strong&gt;如何创建通知&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;随着Android系统不断升级，Notification的创建方式也随之变化，主要变化如下:&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;Android-3-0之前&quot;&gt;&lt;a href=&quot;#Android-3-0之前&quot; class=&quot;headerlink&quot; title=&quot;Android 3.0之前&quot;&gt;&lt;/a&gt;&lt;strong&gt;Android 3.0之前&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Android 3.0 (API level 11)之前，使用&lt;code&gt;new Notification()&lt;/code&gt;方式创建通知: &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ResultActivity.class), 0);
+
+Notification notification = new Notification(icon, tickerText, when);
+notification.setLatestEventInfo(this, title, content, contentIntent);
+
+mNotifyMgr.notify(NOTIFICATIONS_ID, notification);
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&quot;Android-3-0-API-level-11-及更高版本&quot;&gt;&lt;a href=&quot;#Android-3-0-API-level-11-及更高版本&quot; class=&quot;headerlink&quot; title=&quot;Android 3.0 (API level 11)及更高版本&quot;&gt;&lt;/a&gt;&lt;strong&gt;Android 3.0 (API level 11)及更高版本&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Android 3.0开始弃用&lt;code&gt;new Notification()&lt;/code&gt;方式，改用&lt;code&gt;Notification.Builder()&lt;/code&gt;来创建通知:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ResultActivity.class), 0);
+
+Notification notification = new Notification.Builder(this)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle(&amp;quot;My notification&amp;quot;)
+            .setContentText(&amp;quot;Hello World!&amp;quot;)
+            .setContentIntent(contentIntent)
+            .build();   // getNotification()  deprecated in API level 16
+
+mNotifyMgr.notify(NOTIFICATIONS_ID, notification);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这里需要注意: “build()” 是Androdi 4.1(API level 16)加入的，用以替代”getNotification()”。API level 16开始弃用”getNotification()”&lt;/p&gt;
+&lt;h4 id=&quot;兼容Android-3-0之前的版本&quot;&gt;&lt;a href=&quot;#兼容Android-3-0之前的版本&quot; class=&quot;headerlink&quot; title=&quot;兼容Android 3.0之前的版本&quot;&gt;&lt;/a&gt;&lt;strong&gt;兼容Android 3.0之前的版本&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;为了兼容&lt;code&gt;API level 11&lt;/code&gt;之前的版本，&lt;code&gt;v4 Support Library&lt;/code&gt;中提供了&lt;code&gt;NotificationCompat.Builder()&lt;/code&gt;这个替代方法。它与&lt;code&gt;Notification.Builder()&lt;/code&gt;类似，二者没有太大区别。 &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ResultActivity.class), 0);
+
+NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle(&amp;quot;My notification&amp;quot;)
+            .setContentText(&amp;quot;Hello World!&amp;quot;)
+            .setContentIntent(contentIntent)
+            .build();
+
+mNotifyMgr.notify(NOTIFICATIONS_ID, notification);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;注：除特别说明外，本文将根据 NotificationCompat.Builder() 展开解析，Notification.Builder()类似。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&quot;通知基本用法&quot;&gt;&lt;a href=&quot;#通知基本用法&quot; class=&quot;headerlink&quot; title=&quot;通知基本用法&quot;&gt;&lt;/a&gt;&lt;strong&gt;通知基本用法&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;通知的必要属性&quot;&gt;&lt;a href=&quot;#通知的必要属性&quot; class=&quot;headerlink&quot; title=&quot;通知的必要属性&quot;&gt;&lt;/a&gt;&lt;strong&gt;通知的必要属性&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;一个通知必须包含以下三项属性:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;小图标，对应 setSmallIcon()&lt;/li&gt;
+&lt;li&gt;通知标题，对应 setContentTitle()&lt;/li&gt;
+&lt;li&gt;详细信息，对应 setContentText()&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;其他属性均为可选项，更多属性方法请参考&lt;a href=&quot;http://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;NotificationCompat.Builder&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;尽管其他都是可选的，但一般都会为通知添加至少一个动作(Action)，这个动作可以是跳转到Activity、启动一个Service或发送一个Broadcas等。 通过以下方式为通知添加动作:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用PendingIntent&lt;/li&gt;
+&lt;li&gt;通过大视图通知的 Action Button //仅支持Android 4.1 (API level 16)及更高版本，稍后会介绍&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;创建通知&quot;&gt;&lt;a href=&quot;#创建通知&quot; class=&quot;headerlink&quot; title=&quot;创建通知&quot;&gt;&lt;/a&gt;&lt;strong&gt;创建通知&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;1、实例化一个NotificationCompat.Builder对象&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle(&amp;quot;My notification&amp;quot;)
+            .setContentText(&amp;quot;Hello World!&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;NotificationCompat.Builder自动设置的默认值:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;priority: PRIORITY_DEFAULT&lt;/li&gt;
+&lt;li&gt;when: System.currentTimeMillis() &lt;/li&gt;
+&lt;li&gt;audio stream: STREAM_DEFAULT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;2、定义并设置一个通知动作(Action)&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Intent resultIntent = new Intent(this, ResultActivity.class);
+PendingIntent resultPendingIntent = PendingIntent.getActivity(
+            this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+mBuilder.setContentIntent(resultPendingIntent);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;3、生成&lt;code&gt;Notification&lt;/code&gt;对象 &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Notificatioin notification = mBuilder.build();
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;4、使用&lt;code&gt;NotificationManager&lt;/code&gt;发送通知 &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// Sets an ID for the notification
+int mNotificationId = 001;
+
+// Gets an instance of the NotificationManager service
+NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+// Builds the notification and issues it.
+mNotifyMgr.notify(mNotificationId, notification);
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&quot;更新通知&quot;&gt;&lt;a href=&quot;#更新通知&quot; class=&quot;headerlink&quot; title=&quot;更新通知&quot;&gt;&lt;/a&gt;&lt;strong&gt;更新通知&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;更新通知很简单，只需再次发送相同ID的通知即可，如果之前的通知依然存在则会更新通知属性，如果之前通知不存在则重新创建。&lt;br&gt;示例代码:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+// Sets an ID for the notification, so it can be updated
+int notifyID = 1;
+NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
+        .setContentTitle(&amp;quot;New Message&amp;quot;)
+        .setContentText(&amp;quot;You&amp;apos;ve received new messages.&amp;quot;)
+        .setSmallIcon(R.drawable.ic_notify_status);
+
+int numMessages = 0;
+// Start of a loop that processes data and then notifies the user
+...
+    mNotifyBuilder.setContentText(&amp;quot;new content text&amp;quot;)
+            .setNumber(++numMessages);
+    // Because the ID remains unchanged, the existing notification is updated.
+    mNotifyMgr.notify(notifyID, mNotifyBuilder.build());
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&quot;取消通知&quot;&gt;&lt;a href=&quot;#取消通知&quot; class=&quot;headerlink&quot; title=&quot;取消通知&quot;&gt;&lt;/a&gt;&lt;strong&gt;取消通知&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;取消通知有如下4种方式:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;点击通知栏的清除按钮，会清除所有可清除的通知&lt;/li&gt;
+&lt;li&gt;设置了 setAutoCancel() 或 FLAG_AUTO_CANCEL的通知，点击该通知时会清除它&lt;/li&gt;
+&lt;li&gt;通过 NotificationManager 调用 cancel() 方法清除指定ID的通知&lt;/li&gt;
+&lt;li&gt;通过 NotificationManager 调用 cancelAll() 方法清除所有该应用之前发送的通知&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;通知类型&quot;&gt;&lt;a href=&quot;#通知类型&quot; class=&quot;headerlink&quot; title=&quot;通知类型&quot;&gt;&lt;/a&gt;&lt;strong&gt;通知类型&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;大视图通知&quot;&gt;&lt;a href=&quot;#大视图通知&quot; class=&quot;headerlink&quot; title=&quot;大视图通知&quot;&gt;&lt;/a&gt;&lt;strong&gt;大视图通知&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;通知有两种视图：普通视图和大视图。&lt;br&gt;普通视图:&lt;br&gt;&lt;img src=&quot;https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/notifications-normalview.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;大视图:&lt;br&gt;&lt;img src=&quot;https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/notifications-bigview.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;默认情况下为普通视图，可通过&lt;code&gt;NotificationCompat.Builder.setStyle()&lt;/code&gt;设置大视图。 &lt;/p&gt;
+&lt;p&gt;注: 大视图(Big Views)由Android 4.1(API level 16)开始引入，且仅支持Android 4.1及更高版本。&lt;/p&gt;
+&lt;h5 id=&quot;构建大视图通知&quot;&gt;&lt;a href=&quot;#构建大视图通知&quot; class=&quot;headerlink&quot; title=&quot;构建大视图通知&quot;&gt;&lt;/a&gt;&lt;strong&gt;构建大视图通知&lt;/strong&gt;&lt;/h5&gt;&lt;p&gt;以上图为例:&lt;br&gt;1、构建Action Button的PendingIntent &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Intent dismissIntent = new Intent(this, PingService.class);
+dismissIntent.setAction(CommonConstants.ACTION_DISMISS);
+PendingIntent piDismiss = PendingIntent.getService(this, 0, dismissIntent, 0);
+
+Intent snoozeIntent = new Intent(this, PingService.class);
+snoozeIntent.setAction(CommonConstants.ACTION_SNOOZE);
+PendingIntent piSnooze = PendingIntent.getService(this, 0, snoozeIntent, 0);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;2、构建NotificatonCompat.Builder对象&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+        .setSmallIcon(R.drawable.ic_stat_notification)
+        .setContentTitle(getString(R.string.notification))
+        .setContentText(getString(R.string.ping))
+        .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+        // 该方法在Android 4.1之前会被忽略
+        .setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(msg))
+        //添加Action Button
+        .addAction (R.drawable.ic_stat_dismiss,
+                getString(R.string.dismiss), piDismiss)
+        .addAction (R.drawable.ic_stat_snooze,
+                getString(R.string.snooze), piSnooze);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;3、其他步骤与普通视图相同&lt;/p&gt;
+&lt;h4 id=&quot;进度条通知&quot;&gt;&lt;a href=&quot;#进度条通知&quot; class=&quot;headerlink&quot; title=&quot;进度条通知&quot;&gt;&lt;/a&gt;&lt;strong&gt;进度条通知&lt;/strong&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;明确进度的进度条&lt;/strong&gt;&lt;br&gt;使用&lt;code&gt;setProgress(max, progress, false)&lt;/code&gt;来更新进度。&lt;br&gt;max: 最大进度值&lt;br&gt;progress: 当前进度&lt;br&gt;false: 是否是不明确的进度条&lt;/p&gt;
+&lt;p&gt;模拟下载过程，示例如下:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;    int id = 1;
+...
+mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+mBuilder = new NotificationCompat.Builder(this);
+mBuilder.setContentTitle(&amp;quot;Picture Download&amp;quot;)
+    .setContentText(&amp;quot;Download in progress&amp;quot;)
+    .setSmallIcon(R.drawable.ic_notification);
+
+// Start a lengthy operation in a background thread
+new Thread(
+    new Runnable() {
+        @Override
+        public void run() {
+            int incr;
+            for (incr = 0; incr &amp;lt;= 100; incr+=5) {
+                mBuilder.setProgress(100, incr, false);
+                mNotifyManager.notify(id, mBuilder.build());
+                try {
+                    // Sleep for 5 seconds
+                    Thread.sleep(5*1000);
+                } catch (InterruptedException e) {
+                    Log.d(TAG, &amp;quot;sleep failure&amp;quot;);
+                }
+            }
+            mBuilder.setContentText(&amp;quot;Download complete&amp;quot;)//下载完成           
+                    .setProgress(0,0,false);    //移除进度条
+            mNotifyManager.notify(id, mBuilder.build());
+        }
+    }
+).start();
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;img src=&quot;https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/progress_bar_summary.png&quot; alt=&quot;&quot;&gt;&lt;br&gt;上图，分别为下载过程中进度条通知 和 下载完成移除进度条后的通知。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;不确定进度的进度条&lt;/strong&gt;&lt;br&gt;使用&lt;code&gt;setProgress(0, 0, true)&lt;/code&gt;来表示进度不明确的进度条&lt;/p&gt;
+&lt;p&gt;mBuilder.setProgress(0, 0, true); mNotifyManager.notify(id, mBuilder.build());&lt;br&gt;&lt;img src=&quot;https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/activity_indicator.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;浮动通知-Heads-up-Notifications&quot;&gt;&lt;a href=&quot;#浮动通知-Heads-up-Notifications&quot; class=&quot;headerlink&quot; title=&quot;浮动通知(Heads-up Notifications)&quot;&gt;&lt;/a&gt;&lt;strong&gt;浮动通知(Heads-up Notifications)&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Android 5.0(API level 21)开始，当屏幕未上锁且亮屏时，通知可以以小窗口形式显示。用户可以在不离开当前应用前提下操作该通知。&lt;br&gt;如图:&lt;br&gt;&lt;img src=&quot;https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/heads-up.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
+        .setContentTitle(&amp;quot;New Message&amp;quot;)
+        .setContentText(&amp;quot;You&amp;apos;ve received new messages.&amp;quot;)
+        .setSmallIcon(R.drawable.ic_notify_status)
+        .setFullScreenIntent(pendingIntent, false);
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;以下两种情况会显示浮动通知:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;setFullScreenIntent()，如上述示例。&lt;/li&gt;
+&lt;li&gt;通知拥有高优先级且使用了铃声和振动&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;锁屏通知&quot;&gt;&lt;a href=&quot;#锁屏通知&quot; class=&quot;headerlink&quot; title=&quot;锁屏通知&quot;&gt;&lt;/a&gt;&lt;strong&gt;锁屏通知&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Android 5.0(API level 21)开始，通知可以显示在锁屏上。用户可以通过设置选择是否允许敏感的通知内容显示在安全的锁屏上。&lt;br&gt;你的应用可以通过&lt;code&gt;setVisibility()&lt;/code&gt;控制通知的显示等级:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;VISIBILITY_PRIVATE : 显示基本信息，如通知的图标，但隐藏通知的全部内容&lt;/li&gt;
+&lt;li&gt;VISIBILITY_PUBLIC : 显示通知的全部内容&lt;/li&gt;
+&lt;li&gt;VISIBILITY_SECRET : 不显示任何内容，包括图标&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;自定义通知&quot;&gt;&lt;a href=&quot;#自定义通知&quot; class=&quot;headerlink&quot; title=&quot;自定义通知&quot;&gt;&lt;/a&gt;&lt;strong&gt;自定义通知&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Android系统允许使用&lt;a href=&quot;http://developer.android.com/reference/android/widget/RemoteViews.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;RemoteViews&lt;/a&gt;来自定义通知。&lt;br&gt;自定义普通视图通知高度限制为64dp，大视图通知高度限制为256dp。同时，建议自定义通知尽量简单，以提高兼容性。&lt;/p&gt;
+&lt;p&gt;自定义通知需要做如下操作:&lt;br&gt;1、创建自定义通知布局&lt;br&gt;2、使用RemoteViews定义通知组件，如图标、文字等&lt;br&gt;3、调用&lt;code&gt;setContent()&lt;/code&gt;将RemoteViews对象绑定到NotificationCompat.Builder&lt;br&gt;4、同正常发送通知流程  &lt;/p&gt;
+&lt;p&gt;注意: 避免为通知设置背景，因为兼容性原因，有些文字可能看不清。  &lt;/p&gt;
+&lt;h5 id=&quot;定义通知文本样式&quot;&gt;&lt;a href=&quot;#定义通知文本样式&quot; class=&quot;headerlink&quot; title=&quot;定义通知文本样式&quot;&gt;&lt;/a&gt;&lt;strong&gt;定义通知文本样式&lt;/strong&gt;&lt;/h5&gt;&lt;p&gt;通知的背景颜色在不同的设备和版本中有所不同，Android2.3开始，系统定义了一套标准通知文本样式，建议自定义通知使用标准样式，这样有助于通知文本可见。&lt;br&gt;通知文本样式:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Android 5.0之前可用:
+android:style/TextAppearance.StatusBar.EventContent.Title    // 通知标题样式  
+android:style/TextAppearance.StatusBar.EventContent             // 通知内容样式  
+
+Android 5.0及更高版本:  
+android:style/TextAppearance.Material.Notification.Title         // 通知标题样式  
+android:style/TextAppearance.Material.Notification                  // 通知内容样式  
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;更多通知的标准样式和布局，可参考源码&lt;code&gt;frameworks/base/core/res/res/layout&lt;/code&gt;路径下的通知模版如:  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Android 5.0之前:  
+notification_template_base.xml  
+notification_template_big_base.xml  
+notification_template_big_picture.xml  
+notification_template_big_text.xml  
+
+Android 5.0 及更高版本:  
+notification_template_material_base.xml  
+notification_template_material_big_base.xml  
+notification_template_material_big_picture.xml  
+notification_template_part_chronometer.xml  
+notification_template_progressbar.xml  
+
+等等。
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;保留Activity返回栈&quot;&gt;&lt;a href=&quot;#保留Activity返回栈&quot; class=&quot;headerlink&quot; title=&quot;保留Activity返回栈&quot;&gt;&lt;/a&gt;&lt;strong&gt;保留Activity返回栈&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;常规Activity&quot;&gt;&lt;a href=&quot;#常规Activity&quot; class=&quot;headerlink&quot; title=&quot;常规Activity&quot;&gt;&lt;/a&gt;&lt;strong&gt;常规Activity&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;默认情况下，从通知启动一个Activity，按返回键会回到主屏幕。但某些时候有按返回键仍然留在当前应用的需求，这就要用到&lt;code&gt;TaskStackBuilder&lt;/code&gt;了。&lt;/p&gt;
+&lt;p&gt;1、在manifest中定义Activity的关系&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Android 4.0.3 及更早版本
+&amp;lt;activity
+    android:name=&amp;quot;.ResultActivity&amp;quot;&amp;gt;
+    &amp;lt;meta-data
+        android:name=&amp;quot;android.support.PARENT_ACTIVITY&amp;quot;
+        android:value=&amp;quot;.MainActivity&amp;quot;/&amp;gt;
+&amp;lt;/activity&amp;gt;
+
+Android 4.1 及更高版本
+&amp;lt;activity
+    android:name=&amp;quot;.ResultActivity&amp;quot;
+    android:parentActivityName=&amp;quot;.MainActivity&amp;quot;&amp;gt;
+&amp;lt;/activity&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;2、创建返回栈PendingIntent&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Intent resultIntent = new Intent(this, ResultActivity.class);
+TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+// 添加返回栈
+stackBuilder.addParentStack(ResultActivity.class);
+// 添加Intent到栈顶
+stackBuilder.addNextIntent(resultIntent);
+// 创建包含返回栈的pendingIntent
+PendingIntent resultPendingIntent =
+        stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+builder.setContentIntent(resultPendingIntent);
+NotificationManager mNotificationManager =
+    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+mNotificationManager.notify(id, builder.build());
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;上述操作后，从通知启动ResultActivity，按返回键会回到MainActivity，而不是主屏幕。&lt;/p&gt;
+&lt;h4 id=&quot;特殊Activity&quot;&gt;&lt;a href=&quot;#特殊Activity&quot; class=&quot;headerlink&quot; title=&quot;特殊Activity&quot;&gt;&lt;/a&gt;&lt;strong&gt;特殊Activity&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;默认情况下，从通知启动的Activity会在近期任务列表里出现。如果不需要在近期任务里显示，则需要做以下操作:&lt;/p&gt;
+&lt;p&gt;1、在manifest中定义Activity&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;activity
+    android:name=&amp;quot;.ResultActivity&amp;quot;
+    android:launchMode=&amp;quot;singleTask&amp;quot;
+    android:taskAffinity=&amp;quot;&amp;quot;
+    android:excludeFromRecents=&amp;quot;true&amp;quot;&amp;gt;
+&amp;lt;/activity&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;2、构建PendingIntent&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+Intent notifyIntent = new Intent(this, ResultActivity.class);
+
+// Sets the Activity to start in a new, empty task
+notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+PendingIntent notifyPendingIntent =
+        PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+builder.setContentIntent(notifyPendingIntent);
+NotificationManager mNotificationManager =
+    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+mNotificationManager.notify(id, builder.build());
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;上述操作后，从通知启动ResultActivity，此Activity不会出现在近期任务列表中。&lt;/p&gt;
+&lt;h3 id=&quot;通知常见属性和常量&quot;&gt;&lt;a href=&quot;#通知常见属性和常量&quot; class=&quot;headerlink&quot; title=&quot;通知常见属性和常量&quot;&gt;&lt;/a&gt;&lt;strong&gt;通知常见属性和常量&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;通知的提醒方式&quot;&gt;&lt;a href=&quot;#通知的提醒方式&quot; class=&quot;headerlink&quot; title=&quot;通知的提醒方式&quot;&gt;&lt;/a&gt;&lt;strong&gt;通知的提醒方式&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;1、声音提醒&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;默认声音&lt;br&gt;notification.defaults |= Notification.DEFAULT_SOUND;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;自定义声音&lt;br&gt;notification.sound = Uri.parse(“file:///sdcard0/notification.ogg”);&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;2、震动提醒&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;默认振动&lt;br&gt;notification.defaults |= Notification.DEFAULT_VIBRATE;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;自定义振动&lt;br&gt;long[] vibrate = {100, 200, 300, 400}; //震动效果&lt;br&gt;// 表示在100、200、300、400这些时间点交替启动和关闭震动 notification.vibrate = vibrate;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;3、闪烁提醒&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;默认闪烁&lt;br&gt;notification.defaults |= Notification.DEFAULT_LIGHTS;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;自定义闪烁&lt;br&gt;notification.ledARGB = 0xff00ff00; // LED灯的颜色，绿灯&lt;br&gt;notification.ledOnMS = 300; // LED灯显示的毫秒数，300毫秒&lt;br&gt;notification.ledOffMS = 1000; // LED灯关闭的毫秒数，1000毫秒&lt;br&gt;notification.flags |= Notification.FLAG_SHOW_LIGHTS; // 必须加上这个标志&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;常见的Flags&quot;&gt;&lt;a href=&quot;#常见的Flags&quot; class=&quot;headerlink&quot; title=&quot;常见的Flags&quot;&gt;&lt;/a&gt;&lt;strong&gt;常见的Flags&lt;/strong&gt;&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;FLAG_AUTO_CANCEL&lt;br&gt;当通知被用户点击之后会自动被清除(cancel)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;FLAG_INSISTENT&lt;br&gt;在用户响应之前会一直重复提醒音&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;FLAG_ONGOING_EVENT&lt;br&gt;表示正在运行的事件&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;FLAG_NO_CLEAR&lt;br&gt;通知栏点击“清除”按钮时，该通知将不会被清除&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;FLAG_FOREGROUND_SERVICE&lt;br&gt;表示当前服务是前台服务&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;更多Notification属性详见&lt;a href=&quot;http://developer.android.com/reference/android/app/Notification.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Notification&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;That’s all！ 更多通知知识点等待你来发掘，欢迎补充!  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;参考资料&lt;/strong&gt;&lt;br&gt;&lt;a href=&quot;http://developer.android.com/guide/topics/ui/notifiers/notifications.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Notifications&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;原创文章，欢迎转载，转载请注明出处&lt;/strong&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！&lt;/p&gt;
+&lt;h3 id=&quot;什么是通知-Notification&quot;&gt;&lt;a href=&quot;#什么是通知-Notification&quot; class=&quot;headerlink&quot; title=&quot;什么是通知(Notification)&quot;&gt;&lt;/a&gt;&lt;strong&gt;什么是通知(Notification)&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。&lt;br&gt;通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。&lt;/p&gt;
+&lt;p&gt;作为安卓用户界面的重要组成部分，通知有自己的设计指南。在Android 5.0(API level 21)中引入的 &lt;a href=&quot;http://developer.android.com/training/material/index.html&quot;&gt;Material Design&lt;/a&gt; 的变化是特别重要的，更多信息请阅读 &lt;a href=&quot;http://developer.android.com/design/patterns/notifications.html&quot;&gt;通知设计指南&lt;/a&gt;。&lt;/p&gt;
+&lt;h3 id=&quot;如何创建通知&quot;&gt;&lt;a href=&quot;#如何创建通知&quot; class=&quot;headerlink&quot; title=&quot;如何创建通知&quot;&gt;&lt;/a&gt;&lt;strong&gt;如何创建通知&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;随着Android系统不断升级，Notification的创建方式也随之变化，主要变化如下:&lt;br&gt;
+    
+    </summary>
+    
+      <category term="Android Notification" scheme="https://github.com/ConnorLin/categories/Android-Notification/"/>
+    
+    
+      <category term="Android Notification RemoteViews" scheme="https://github.com/ConnorLin/tags/Android-Notification-RemoteViews/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Android应用使用Multidex突破64K方法数限制</title>
     <link href="https://github.com/ConnorLin/2016/04/15/Android%E5%BA%94%E7%94%A8%E4%BD%BF%E7%94%A8Multidex%E7%AA%81%E7%A0%B464K%E6%96%B9%E6%B3%95%E6%95%B0%E9%99%90%E5%88%B6/"/>
     <id>https://github.com/ConnorLin/2016/04/15/Android应用使用Multidex突破64K方法数限制/</id>
     <published>2016-04-15T05:30:59.000Z</published>
-    <updated>2016-04-16T07:28:18.000Z</updated>
+    <updated>2016-04-18T05:48:12.000Z</updated>
     
     <content type="html">&lt;h4 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;&lt;strong&gt;写在前面&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;前几天，开发中遇到一个问题，Log信息如下：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;E/AndroidRuntime(10943): FATAL EXCEPTION: main

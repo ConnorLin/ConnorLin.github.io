@@ -1,0 +1,1011 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android Notification RemoteViews," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ConnorLin's Blog" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！
+什么是通知(Notification)通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。
+作为安卓用户界面的重要组成部分，通知有自己的设计指南。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你真的了解Android Notification吗?">
+<meta property="og:url" content="https://github.com/ConnorLin/2016/04/21/你真的了解Android-Notification吗/index.html">
+<meta property="og:site_name" content="ConnorLin's Blog">
+<meta property="og:description" content="最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！
+什么是通知(Notification)通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。
+作为安卓用户界面的重要组成部分，通知有自己的设计指南。">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/notifications-normalview.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/notifications-bigview.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/progress_bar_summary.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/activity_indicator.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/heads-up.png">
+<meta property="og:updated_time" content="2016-04-21T14:06:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="你真的了解Android Notification吗?">
+<meta name="twitter:description" content="最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！
+什么是通知(Notification)通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。
+作为安卓用户界面的重要组成部分，通知有自己的设计指南。">
+<meta name="twitter:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/notifications-normalview.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 6271044407386965000,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 你真的了解Android Notification吗? | ConnorLin's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?eec9e93d155042a162002cc9658c78d1";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=55636241";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">ConnorLin's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                你真的了解Android Notification吗?
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-21T21:51:01+08:00" content="2016-04-21">
+              2016-04-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android-Notification/" itemprop="url" rel="index">
+                    <span itemprop="name">Android Notification</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/21/你真的了解Android-Notification吗/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/21/你真的了解Android-Notification吗/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！</p>
+<h3 id="什么是通知-Notification"><a href="#什么是通知-Notification" class="headerlink" title="什么是通知(Notification)"></a><strong>什么是通知(Notification)</strong></h3><p>通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。<br>通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。</p>
+<p>作为安卓用户界面的重要组成部分，通知有自己的设计指南。在Android 5.0(API level 21)中引入的 <a href="http://developer.android.com/training/material/index.html" target="_blank" rel="external">Material Design</a> 的变化是特别重要的，更多信息请阅读 <a href="http://developer.android.com/design/patterns/notifications.html" target="_blank" rel="external">通知设计指南</a>。</p>
+<h3 id="如何创建通知"><a href="#如何创建通知" class="headerlink" title="如何创建通知"></a><strong>如何创建通知</strong></h3><p>随着Android系统不断升级，Notification的创建方式也随之变化，主要变化如下:<br><a id="more"></a></p>
+<h4 id="Android-3-0之前"><a href="#Android-3-0之前" class="headerlink" title="Android 3.0之前"></a><strong>Android 3.0之前</strong></h4><p>Android 3.0 (API level 11)之前，使用<code>new Notification()</code>方式创建通知: </p>
+<pre><code>NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ResultActivity.class), 0);
+
+Notification notification = new Notification(icon, tickerText, when);
+notification.setLatestEventInfo(this, title, content, contentIntent);
+
+mNotifyMgr.notify(NOTIFICATIONS_ID, notification);
+</code></pre><h4 id="Android-3-0-API-level-11-及更高版本"><a href="#Android-3-0-API-level-11-及更高版本" class="headerlink" title="Android 3.0 (API level 11)及更高版本"></a><strong>Android 3.0 (API level 11)及更高版本</strong></h4><p>Android 3.0开始弃用<code>new Notification()</code>方式，改用<code>Notification.Builder()</code>来创建通知:</p>
+<pre><code>NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ResultActivity.class), 0);
+
+Notification notification = new Notification.Builder(this)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle(&quot;My notification&quot;)
+            .setContentText(&quot;Hello World!&quot;)
+            .setContentIntent(contentIntent)
+            .build();   // getNotification()  deprecated in API level 16
+
+mNotifyMgr.notify(NOTIFICATIONS_ID, notification);
+</code></pre><p>这里需要注意: “build()” 是Androdi 4.1(API level 16)加入的，用以替代”getNotification()”。API level 16开始弃用”getNotification()”</p>
+<h4 id="兼容Android-3-0之前的版本"><a href="#兼容Android-3-0之前的版本" class="headerlink" title="兼容Android 3.0之前的版本"></a><strong>兼容Android 3.0之前的版本</strong></h4><p>为了兼容<code>API level 11</code>之前的版本，<code>v4 Support Library</code>中提供了<code>NotificationCompat.Builder()</code>这个替代方法。它与<code>Notification.Builder()</code>类似，二者没有太大区别。 </p>
+<pre><code>NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, ResultActivity.class), 0);
+
+NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle(&quot;My notification&quot;)
+            .setContentText(&quot;Hello World!&quot;)
+            .setContentIntent(contentIntent)
+            .build();
+
+mNotifyMgr.notify(NOTIFICATIONS_ID, notification);
+</code></pre><p><em>注：除特别说明外，本文将根据 NotificationCompat.Builder() 展开解析，Notification.Builder()类似。</em></p>
+<h3 id="通知基本用法"><a href="#通知基本用法" class="headerlink" title="通知基本用法"></a><strong>通知基本用法</strong></h3><h4 id="通知的必要属性"><a href="#通知的必要属性" class="headerlink" title="通知的必要属性"></a><strong>通知的必要属性</strong></h4><p>一个通知必须包含以下三项属性:</p>
+<ul>
+<li>小图标，对应 setSmallIcon()</li>
+<li>通知标题，对应 setContentTitle()</li>
+<li>详细信息，对应 setContentText()</li>
+</ul>
+<p>其他属性均为可选项，更多属性方法请参考<a href="http://developer.android.com/reference/android/support/v4/app/NotificationCompat.Builder.html" target="_blank" rel="external">NotificationCompat.Builder</a>。</p>
+<p>尽管其他都是可选的，但一般都会为通知添加至少一个动作(Action)，这个动作可以是跳转到Activity、启动一个Service或发送一个Broadcas等。 通过以下方式为通知添加动作:</p>
+<ul>
+<li>使用PendingIntent</li>
+<li>通过大视图通知的 Action Button //仅支持Android 4.1 (API level 16)及更高版本，稍后会介绍</li>
+</ul>
+<h4 id="创建通知"><a href="#创建通知" class="headerlink" title="创建通知"></a><strong>创建通知</strong></h4><p>1、实例化一个NotificationCompat.Builder对象</p>
+<pre><code>NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+            .setSmallIcon(R.drawable.notification_icon)
+            .setContentTitle(&quot;My notification&quot;)
+            .setContentText(&quot;Hello World!&quot;);
+</code></pre><p>NotificationCompat.Builder自动设置的默认值:</p>
+<ul>
+<li>priority: PRIORITY_DEFAULT</li>
+<li>when: System.currentTimeMillis() </li>
+<li>audio stream: STREAM_DEFAULT</li>
+</ul>
+<p>2、定义并设置一个通知动作(Action)</p>
+<pre><code>Intent resultIntent = new Intent(this, ResultActivity.class);
+PendingIntent resultPendingIntent = PendingIntent.getActivity(
+            this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+mBuilder.setContentIntent(resultPendingIntent);
+</code></pre><p>3、生成<code>Notification</code>对象 </p>
+<pre><code>Notificatioin notification = mBuilder.build();
+</code></pre><p>4、使用<code>NotificationManager</code>发送通知 </p>
+<pre><code>// Sets an ID for the notification
+int mNotificationId = 001;
+
+// Gets an instance of the NotificationManager service
+NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+// Builds the notification and issues it.
+mNotifyMgr.notify(mNotificationId, notification);
+</code></pre><h4 id="更新通知"><a href="#更新通知" class="headerlink" title="更新通知"></a><strong>更新通知</strong></h4><p>更新通知很简单，只需再次发送相同ID的通知即可，如果之前的通知依然存在则会更新通知属性，如果之前通知不存在则重新创建。<br>示例代码:</p>
+<pre><code>NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+// Sets an ID for the notification, so it can be updated
+int notifyID = 1;
+NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
+        .setContentTitle(&quot;New Message&quot;)
+        .setContentText(&quot;You&apos;ve received new messages.&quot;)
+        .setSmallIcon(R.drawable.ic_notify_status);
+
+int numMessages = 0;
+// Start of a loop that processes data and then notifies the user
+...
+    mNotifyBuilder.setContentText(&quot;new content text&quot;)
+            .setNumber(++numMessages);
+    // Because the ID remains unchanged, the existing notification is updated.
+    mNotifyMgr.notify(notifyID, mNotifyBuilder.build());
+...
+</code></pre><h4 id="取消通知"><a href="#取消通知" class="headerlink" title="取消通知"></a><strong>取消通知</strong></h4><p>取消通知有如下4种方式:</p>
+<ul>
+<li>点击通知栏的清除按钮，会清除所有可清除的通知</li>
+<li>设置了 setAutoCancel() 或 FLAG_AUTO_CANCEL的通知，点击该通知时会清除它</li>
+<li>通过 NotificationManager 调用 cancel() 方法清除指定ID的通知</li>
+<li>通过 NotificationManager 调用 cancelAll() 方法清除所有该应用之前发送的通知</li>
+</ul>
+<h3 id="通知类型"><a href="#通知类型" class="headerlink" title="通知类型"></a><strong>通知类型</strong></h3><h4 id="大视图通知"><a href="#大视图通知" class="headerlink" title="大视图通知"></a><strong>大视图通知</strong></h4><p>通知有两种视图：普通视图和大视图。<br>普通视图:<br><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/notifications-normalview.png" alt=""><br>大视图:<br><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/notifications-bigview.png" alt=""></p>
+<p>默认情况下为普通视图，可通过<code>NotificationCompat.Builder.setStyle()</code>设置大视图。 </p>
+<p>注: 大视图(Big Views)由Android 4.1(API level 16)开始引入，且仅支持Android 4.1及更高版本。</p>
+<h5 id="构建大视图通知"><a href="#构建大视图通知" class="headerlink" title="构建大视图通知"></a><strong>构建大视图通知</strong></h5><p>以上图为例:<br>1、构建Action Button的PendingIntent </p>
+<pre><code>Intent dismissIntent = new Intent(this, PingService.class);
+dismissIntent.setAction(CommonConstants.ACTION_DISMISS);
+PendingIntent piDismiss = PendingIntent.getService(this, 0, dismissIntent, 0);
+
+Intent snoozeIntent = new Intent(this, PingService.class);
+snoozeIntent.setAction(CommonConstants.ACTION_SNOOZE);
+PendingIntent piSnooze = PendingIntent.getService(this, 0, snoozeIntent, 0);
+</code></pre><p>2、构建NotificatonCompat.Builder对象</p>
+<pre><code>NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+        .setSmallIcon(R.drawable.ic_stat_notification)
+        .setContentTitle(getString(R.string.notification))
+        .setContentText(getString(R.string.ping))
+        .setDefaults(Notification.DEFAULT_ALL) // requires VIBRATE permission
+        // 该方法在Android 4.1之前会被忽略
+        .setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(msg))
+        //添加Action Button
+        .addAction (R.drawable.ic_stat_dismiss,
+                getString(R.string.dismiss), piDismiss)
+        .addAction (R.drawable.ic_stat_snooze,
+                getString(R.string.snooze), piSnooze);
+</code></pre><p>3、其他步骤与普通视图相同</p>
+<h4 id="进度条通知"><a href="#进度条通知" class="headerlink" title="进度条通知"></a><strong>进度条通知</strong></h4><ul>
+<li><p><strong>明确进度的进度条</strong><br>使用<code>setProgress(max, progress, false)</code>来更新进度。<br>max: 最大进度值<br>progress: 当前进度<br>false: 是否是不明确的进度条</p>
+<p>模拟下载过程，示例如下:</p>
+<pre><code>    int id = 1;
+...
+mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+mBuilder = new NotificationCompat.Builder(this);
+mBuilder.setContentTitle(&quot;Picture Download&quot;)
+    .setContentText(&quot;Download in progress&quot;)
+    .setSmallIcon(R.drawable.ic_notification);
+
+// Start a lengthy operation in a background thread
+new Thread(
+    new Runnable() {
+        @Override
+        public void run() {
+            int incr;
+            for (incr = 0; incr &lt;= 100; incr+=5) {
+                mBuilder.setProgress(100, incr, false);
+                mNotifyManager.notify(id, mBuilder.build());
+                try {
+                    // Sleep for 5 seconds
+                    Thread.sleep(5*1000);
+                } catch (InterruptedException e) {
+                    Log.d(TAG, &quot;sleep failure&quot;);
+                }
+            }
+            mBuilder.setContentText(&quot;Download complete&quot;)//下载完成           
+                    .setProgress(0,0,false);    //移除进度条
+            mNotifyManager.notify(id, mBuilder.build());
+        }
+    }
+).start();
+</code></pre><p><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/progress_bar_summary.png" alt=""><br>上图，分别为下载过程中进度条通知 和 下载完成移除进度条后的通知。</p>
+</li>
+<li><p><strong>不确定进度的进度条</strong><br>使用<code>setProgress(0, 0, true)</code>来表示进度不明确的进度条</p>
+<p>mBuilder.setProgress(0, 0, true); mNotifyManager.notify(id, mBuilder.build());<br><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/activity_indicator.png" alt=""></p>
+</li>
+</ul>
+<h4 id="浮动通知-Heads-up-Notifications"><a href="#浮动通知-Heads-up-Notifications" class="headerlink" title="浮动通知(Heads-up Notifications)"></a><strong>浮动通知(Heads-up Notifications)</strong></h4><p>Android 5.0(API level 21)开始，当屏幕未上锁且亮屏时，通知可以以小窗口形式显示。用户可以在不离开当前应用前提下操作该通知。<br>如图:<br><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/heads-up.png" alt=""></p>
+<pre><code>NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
+        .setContentTitle(&quot;New Message&quot;)
+        .setContentText(&quot;You&apos;ve received new messages.&quot;)
+        .setSmallIcon(R.drawable.ic_notify_status)
+        .setFullScreenIntent(pendingIntent, false);
+</code></pre><p>以下两种情况会显示浮动通知:</p>
+<ul>
+<li>setFullScreenIntent()，如上述示例。</li>
+<li>通知拥有高优先级且使用了铃声和振动</li>
+</ul>
+<h4 id="锁屏通知"><a href="#锁屏通知" class="headerlink" title="锁屏通知"></a><strong>锁屏通知</strong></h4><p>Android 5.0(API level 21)开始，通知可以显示在锁屏上。用户可以通过设置选择是否允许敏感的通知内容显示在安全的锁屏上。<br>你的应用可以通过<code>setVisibility()</code>控制通知的显示等级:</p>
+<ul>
+<li>VISIBILITY_PRIVATE : 显示基本信息，如通知的图标，但隐藏通知的全部内容</li>
+<li>VISIBILITY_PUBLIC : 显示通知的全部内容</li>
+<li>VISIBILITY_SECRET : 不显示任何内容，包括图标</li>
+</ul>
+<h4 id="自定义通知"><a href="#自定义通知" class="headerlink" title="自定义通知"></a><strong>自定义通知</strong></h4><p>Android系统允许使用<a href="http://developer.android.com/reference/android/widget/RemoteViews.html" target="_blank" rel="external">RemoteViews</a>来自定义通知。<br>自定义普通视图通知高度限制为64dp，大视图通知高度限制为256dp。同时，建议自定义通知尽量简单，以提高兼容性。</p>
+<p>自定义通知需要做如下操作:<br>1、创建自定义通知布局<br>2、使用RemoteViews定义通知组件，如图标、文字等<br>3、调用<code>setContent()</code>将RemoteViews对象绑定到NotificationCompat.Builder<br>4、同正常发送通知流程  </p>
+<p>注意: 避免为通知设置背景，因为兼容性原因，有些文字可能看不清。  </p>
+<h5 id="定义通知文本样式"><a href="#定义通知文本样式" class="headerlink" title="定义通知文本样式"></a><strong>定义通知文本样式</strong></h5><p>通知的背景颜色在不同的设备和版本中有所不同，Android2.3开始，系统定义了一套标准通知文本样式，建议自定义通知使用标准样式，这样有助于通知文本可见。<br>通知文本样式:</p>
+<pre><code>Android 5.0之前可用:
+android:style/TextAppearance.StatusBar.EventContent.Title    // 通知标题样式  
+android:style/TextAppearance.StatusBar.EventContent             // 通知内容样式  
+
+Android 5.0及更高版本:  
+android:style/TextAppearance.Material.Notification.Title         // 通知标题样式  
+android:style/TextAppearance.Material.Notification                  // 通知内容样式  
+</code></pre><p>更多通知的标准样式和布局，可参考源码<code>frameworks/base/core/res/res/layout</code>路径下的通知模版如:  </p>
+<pre><code>Android 5.0之前:  
+notification_template_base.xml  
+notification_template_big_base.xml  
+notification_template_big_picture.xml  
+notification_template_big_text.xml  
+
+Android 5.0 及更高版本:  
+notification_template_material_base.xml  
+notification_template_material_big_base.xml  
+notification_template_material_big_picture.xml  
+notification_template_part_chronometer.xml  
+notification_template_progressbar.xml  
+
+等等。
+</code></pre><h3 id="保留Activity返回栈"><a href="#保留Activity返回栈" class="headerlink" title="保留Activity返回栈"></a><strong>保留Activity返回栈</strong></h3><h4 id="常规Activity"><a href="#常规Activity" class="headerlink" title="常规Activity"></a><strong>常规Activity</strong></h4><p>默认情况下，从通知启动一个Activity，按返回键会回到主屏幕。但某些时候有按返回键仍然留在当前应用的需求，这就要用到<code>TaskStackBuilder</code>了。</p>
+<p>1、在manifest中定义Activity的关系</p>
+<pre><code>Android 4.0.3 及更早版本
+&lt;activity
+    android:name=&quot;.ResultActivity&quot;&gt;
+    &lt;meta-data
+        android:name=&quot;android.support.PARENT_ACTIVITY&quot;
+        android:value=&quot;.MainActivity&quot;/&gt;
+&lt;/activity&gt;
+
+Android 4.1 及更高版本
+&lt;activity
+    android:name=&quot;.ResultActivity&quot;
+    android:parentActivityName=&quot;.MainActivity&quot;&gt;
+&lt;/activity&gt;
+</code></pre><p>2、创建返回栈PendingIntent</p>
+<pre><code>Intent resultIntent = new Intent(this, ResultActivity.class);
+TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+// 添加返回栈
+stackBuilder.addParentStack(ResultActivity.class);
+// 添加Intent到栈顶
+stackBuilder.addNextIntent(resultIntent);
+// 创建包含返回栈的pendingIntent
+PendingIntent resultPendingIntent =
+        stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+builder.setContentIntent(resultPendingIntent);
+NotificationManager mNotificationManager =
+    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+mNotificationManager.notify(id, builder.build());
+</code></pre><p>上述操作后，从通知启动ResultActivity，按返回键会回到MainActivity，而不是主屏幕。</p>
+<h4 id="特殊Activity"><a href="#特殊Activity" class="headerlink" title="特殊Activity"></a><strong>特殊Activity</strong></h4><p>默认情况下，从通知启动的Activity会在近期任务列表里出现。如果不需要在近期任务里显示，则需要做以下操作:</p>
+<p>1、在manifest中定义Activity</p>
+<pre><code>&lt;activity
+    android:name=&quot;.ResultActivity&quot;
+    android:launchMode=&quot;singleTask&quot;
+    android:taskAffinity=&quot;&quot;
+    android:excludeFromRecents=&quot;true&quot;&gt;
+&lt;/activity&gt;
+</code></pre><p>2、构建PendingIntent</p>
+<pre><code>NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+Intent notifyIntent = new Intent(this, ResultActivity.class);
+
+// Sets the Activity to start in a new, empty task
+notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+PendingIntent notifyPendingIntent =
+        PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+builder.setContentIntent(notifyPendingIntent);
+NotificationManager mNotificationManager =
+    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+mNotificationManager.notify(id, builder.build());
+</code></pre><p>上述操作后，从通知启动ResultActivity，此Activity不会出现在近期任务列表中。</p>
+<h3 id="通知常见属性和常量"><a href="#通知常见属性和常量" class="headerlink" title="通知常见属性和常量"></a><strong>通知常见属性和常量</strong></h3><h4 id="通知的提醒方式"><a href="#通知的提醒方式" class="headerlink" title="通知的提醒方式"></a><strong>通知的提醒方式</strong></h4><p><strong>1、声音提醒</strong></p>
+<ul>
+<li><p>默认声音<br>notification.defaults |= Notification.DEFAULT_SOUND;</p>
+</li>
+<li><p>自定义声音<br>notification.sound = Uri.parse(“file:///sdcard0/notification.ogg”);</p>
+</li>
+</ul>
+<p><strong>2、震动提醒</strong></p>
+<ul>
+<li><p>默认振动<br>notification.defaults |= Notification.DEFAULT_VIBRATE;</p>
+</li>
+<li><p>自定义振动<br>long[] vibrate = {100, 200, 300, 400}; //震动效果<br>// 表示在100、200、300、400这些时间点交替启动和关闭震动 notification.vibrate = vibrate;</p>
+</li>
+</ul>
+<p><strong>3、闪烁提醒</strong></p>
+<ul>
+<li><p>默认闪烁<br>notification.defaults |= Notification.DEFAULT_LIGHTS;</p>
+</li>
+<li><p>自定义闪烁<br>notification.ledARGB = 0xff00ff00; // LED灯的颜色，绿灯<br>notification.ledOnMS = 300; // LED灯显示的毫秒数，300毫秒<br>notification.ledOffMS = 1000; // LED灯关闭的毫秒数，1000毫秒<br>notification.flags |= Notification.FLAG_SHOW_LIGHTS; // 必须加上这个标志</p>
+</li>
+</ul>
+<h4 id="常见的Flags"><a href="#常见的Flags" class="headerlink" title="常见的Flags"></a><strong>常见的Flags</strong></h4><ul>
+<li><p>FLAG_AUTO_CANCEL<br>当通知被用户点击之后会自动被清除(cancel)</p>
+</li>
+<li><p>FLAG_INSISTENT<br>在用户响应之前会一直重复提醒音</p>
+</li>
+<li><p>FLAG_ONGOING_EVENT<br>表示正在运行的事件</p>
+</li>
+<li><p>FLAG_NO_CLEAR<br>通知栏点击“清除”按钮时，该通知将不会被清除</p>
+</li>
+<li><p>FLAG_FOREGROUND_SERVICE<br>表示当前服务是前台服务</p>
+</li>
+</ul>
+<p>更多Notification属性详见<a href="http://developer.android.com/reference/android/app/Notification.html" target="_blank" rel="external">Notification</a>。</p>
+<p>That’s all！ 更多通知知识点等待你来发掘，欢迎补充!  </p>
+<p><strong>参考资料</strong><br><a href="http://developer.android.com/guide/topics/ui/notifiers/notifications.html" target="_blank" rel="external">Notifications</a></p>
+<p><strong>原创文章，欢迎转载，转载请注明出处</strong></p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/wechat-qcode.jpg" alt="ConnorLin wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android-Notification-RemoteViews/" rel="tag">#Android Notification RemoteViews</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/15/Android应用使用Multidex突破64K方法数限制/" rel="next" title="Android应用使用Multidex突破64K方法数限制">
+                <i class="fa fa-chevron-left"></i> Android应用使用Multidex突破64K方法数限制
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/21/你真的了解Android-Notification吗/"
+           data-title="你真的了解Android Notification吗?" data-url="https://github.com/ConnorLin/2016/04/21/你真的了解Android-Notification吗/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="ConnorLin" />
+          <p class="site-author-name" itemprop="name">ConnorLin</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ConnorLin" target="_blank" title="github">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是通知-Notification"><span class="nav-number">1.</span> <span class="nav-text">什么是通知(Notification)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何创建通知"><span class="nav-number">2.</span> <span class="nav-text">如何创建通知</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Android-3-0之前"><span class="nav-number">2.1.</span> <span class="nav-text">Android 3.0之前</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Android-3-0-API-level-11-及更高版本"><span class="nav-number">2.2.</span> <span class="nav-text">Android 3.0 (API level 11)及更高版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#兼容Android-3-0之前的版本"><span class="nav-number">2.3.</span> <span class="nav-text">兼容Android 3.0之前的版本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通知基本用法"><span class="nav-number">3.</span> <span class="nav-text">通知基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#通知的必要属性"><span class="nav-number">3.1.</span> <span class="nav-text">通知的必要属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建通知"><span class="nav-number">3.2.</span> <span class="nav-text">创建通知</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更新通知"><span class="nav-number">3.3.</span> <span class="nav-text">更新通知</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#取消通知"><span class="nav-number">3.4.</span> <span class="nav-text">取消通知</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通知类型"><span class="nav-number">4.</span> <span class="nav-text">通知类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#大视图通知"><span class="nav-number">4.1.</span> <span class="nav-text">大视图通知</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#构建大视图通知"><span class="nav-number">4.1.1.</span> <span class="nav-text">构建大视图通知</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进度条通知"><span class="nav-number">4.2.</span> <span class="nav-text">进度条通知</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#浮动通知-Heads-up-Notifications"><span class="nav-number">4.3.</span> <span class="nav-text">浮动通知(Heads-up Notifications)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#锁屏通知"><span class="nav-number">4.4.</span> <span class="nav-text">锁屏通知</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义通知"><span class="nav-number">4.5.</span> <span class="nav-text">自定义通知</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#定义通知文本样式"><span class="nav-number">4.5.1.</span> <span class="nav-text">定义通知文本样式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保留Activity返回栈"><span class="nav-number">5.</span> <span class="nav-text">保留Activity返回栈</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常规Activity"><span class="nav-number">5.1.</span> <span class="nav-text">常规Activity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特殊Activity"><span class="nav-number">5.2.</span> <span class="nav-text">特殊Activity</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通知常见属性和常量"><span class="nav-number">6.</span> <span class="nav-text">通知常见属性和常量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#通知的提醒方式"><span class="nav-number">6.1.</span> <span class="nav-text">通知的提醒方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见的Flags"><span class="nav-number">6.2.</span> <span class="nav-text">常见的Flags</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ConnorLin</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+  
+  
+</div>
+
+
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"connorlin"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
