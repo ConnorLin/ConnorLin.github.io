@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://github.com/ConnorLin/"/>
-  <updated>2016-04-27T05:59:50.000Z</updated>
+  <updated>2016-04-27T06:38:30.000Z</updated>
   <id>https://github.com/ConnorLin/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://github.com/ConnorLin/2016/04/27/%E8%AE%A9Android-Studio%E6%94%AF%E6%8C%81%E7%B3%BB%E7%BB%9F%E7%AD%BE%E5%90%8D(%E8%AF%81%E4%B9%A6)/"/>
     <id>https://github.com/ConnorLin/2016/04/27/让Android-Studio支持系统签名(证书)/</id>
     <published>2016-04-27T05:54:02.000Z</published>
-    <updated>2016-04-27T05:59:50.000Z</updated>
+    <updated>2016-04-27T06:38:30.000Z</updated>
     
     <content type="html">&lt;p&gt;有时候，我们开发的apk需要用到系统权限，需要在AndroidManifest.xml中添加共享系统进程属性：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;android:sharedUserId=&amp;quot;android.uid.system&amp;quot;
@@ -112,6 +112,10 @@ android:sharedUserId=&amp;quot;android.media&amp;quot;
     
     </summary>
     
+      <category term="Android Studio" scheme="https://github.com/ConnorLin/categories/Android-Studio/"/>
+    
+    
+      <category term="Android Studio, Signature" scheme="https://github.com/ConnorLin/tags/Android-Studio-Signature/"/>
     
   </entry>
   
