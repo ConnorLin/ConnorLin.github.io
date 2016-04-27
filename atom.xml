@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://github.com/ConnorLin/"/>
-  <updated>2016-04-21T14:06:54.000Z</updated>
+  <updated>2016-04-27T05:59:50.000Z</updated>
   <id>https://github.com/ConnorLin/</id>
   
   <author>
@@ -16,11 +16,111 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>让Android Studio支持系统签名</title>
+    <link href="https://github.com/ConnorLin/2016/04/27/%E8%AE%A9Android-Studio%E6%94%AF%E6%8C%81%E7%B3%BB%E7%BB%9F%E7%AD%BE%E5%90%8D(%E8%AF%81%E4%B9%A6)/"/>
+    <id>https://github.com/ConnorLin/2016/04/27/让Android-Studio支持系统签名(证书)/</id>
+    <published>2016-04-27T05:54:02.000Z</published>
+    <updated>2016-04-27T05:59:50.000Z</updated>
+    
+    <content type="html">&lt;p&gt;有时候，我们开发的apk需要用到系统权限，需要在AndroidManifest.xml中添加共享系统进程属性：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;android:sharedUserId=&amp;quot;android.uid.system&amp;quot;
+android:sharedUserId=&amp;quot;android.uid.shared&amp;quot;
+android:sharedUserId=&amp;quot;android.media&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这时候apk的签名就需要是系统签名(platform、shared或media)才能正常使用。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h3 id=&quot;常用系统签名方式&quot;&gt;&lt;a href=&quot;#常用系统签名方式&quot; class=&quot;headerlink&quot; title=&quot;常用系统签名方式&quot;&gt;&lt;/a&gt;&lt;strong&gt;常用系统签名方式&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;Android源码环境下签名&quot;&gt;&lt;a href=&quot;#Android源码环境下签名&quot; class=&quot;headerlink&quot; title=&quot;Android源码环境下签名&quot;&gt;&lt;/a&gt;&lt;strong&gt;Android源码环境下签名&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;这种方式比较麻烦，你需要有编译过的源码环境，并按如下步骤：&lt;/p&gt;
+&lt;p&gt;1、拷贝App源码到Android源码的&lt;code&gt;packages/apps/&lt;/code&gt;目录下，且App源码是普通(Eclipse)格式的&lt;br&gt;2、配置Android.mk，在其中添加&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;LOCAL_CERTIFICATE := platform 或 shared 或 media
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;3、使用&lt;code&gt;mm&lt;/code&gt;编译App，生成的apk即系统签名&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&quot;手动重新签名&quot;&gt;&lt;a href=&quot;#手动重新签名&quot; class=&quot;headerlink&quot; title=&quot;手动重新签名&quot;&gt;&lt;/a&gt;&lt;strong&gt;手动重新签名&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;这种方式比在源码环境下签名简单，App可以在Eclipse或Android Studio下编译，然后给apk重新签名即可。&lt;br&gt;但这种方式在频繁调试的时候比较痛苦，即使写成脚本，也需要重复一样的操作。&lt;/p&gt;
+&lt;h5 id=&quot;相关文件&quot;&gt;&lt;a href=&quot;#相关文件&quot; class=&quot;headerlink&quot; title=&quot;相关文件&quot;&gt;&lt;/a&gt;&lt;strong&gt;相关文件&lt;/strong&gt;&lt;/h5&gt;&lt;p&gt;platform.x509.pem、platform.pk8、signapk.jar&lt;/p&gt;
+&lt;h5 id=&quot;文件位置&quot;&gt;&lt;a href=&quot;#文件位置&quot; class=&quot;headerlink&quot; title=&quot;文件位置&quot;&gt;&lt;/a&gt;&lt;strong&gt;文件位置&lt;/strong&gt;&lt;/h5&gt;&lt;p&gt;platform.x509.pem、platform.pk8:  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;../build/target/product/security
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;signapk.jar:  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;../out/host/linux-x86/framework
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;signapk源码路径:  &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;../build/tools/signapk
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&quot;签名命令&quot;&gt;&lt;a href=&quot;#签名命令&quot; class=&quot;headerlink&quot; title=&quot;签名命令&quot;&gt;&lt;/a&gt;&lt;strong&gt;签名命令&lt;/strong&gt;&lt;/h5&gt;&lt;pre&gt;&lt;code&gt;java -jar signapk.jar platform.x509.pem platform.pk8 old.apk new.apk
+&lt;/code&gt;&lt;/pre&gt;&lt;h5 id=&quot;步骤&quot;&gt;&lt;a href=&quot;#步骤&quot; class=&quot;headerlink&quot; title=&quot;步骤&quot;&gt;&lt;/a&gt;&lt;strong&gt;步骤&lt;/strong&gt;&lt;/h5&gt;&lt;p&gt;1、将相关文件及源apk文件置于同一路径下&lt;br&gt;2、检查源apk包，去掉&lt;code&gt;META-INF/CERT.SF&lt;/code&gt; 和 &lt;code&gt;META-INF/CERT.RSA&lt;/code&gt; 文件&lt;br&gt;3、执行签名命令即可&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;Android-Studio系统签名&quot;&gt;&lt;a href=&quot;#Android-Studio系统签名&quot; class=&quot;headerlink&quot; title=&quot;Android Studio系统签名&quot;&gt;&lt;/a&gt;&lt;strong&gt;Android Studio系统签名&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;让Android Studio集成系统签名，需要用到一个工具&lt;code&gt;keytool-importkeypair&lt;/code&gt;，详见下文。&lt;/p&gt;
+&lt;h4 id=&quot;keytool-importkeypair&quot;&gt;&lt;a href=&quot;#keytool-importkeypair&quot; class=&quot;headerlink&quot; title=&quot;keytool-importkeypair&quot;&gt;&lt;/a&gt;&lt;strong&gt;keytool-importkeypair&lt;/strong&gt;&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;keytool-importkeypair – A shell script to import key/certificate pairs into an existing Java keystore&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这个工具的作用是将系统签名的相关信息导入到已有的签名文件里。可从&lt;a href=&quot;https://github.com/getfatday/keytool-importkeypair&quot;&gt;这里&lt;/a&gt;下载。&lt;/p&gt;
+&lt;p&gt;工具的使用方法可以通过–help或README.textile来寻求帮助，或参考&lt;a href=&quot;http://czj4451.iteye.com/blog/1487684&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;使用keytool工具&lt;/a&gt; 这篇文章。&lt;/p&gt;
+&lt;h4 id=&quot;相关文件-1&quot;&gt;&lt;a href=&quot;#相关文件-1&quot; class=&quot;headerlink&quot; title=&quot;相关文件&quot;&gt;&lt;/a&gt;&lt;strong&gt;相关文件&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;platform.x509.pem、platform.pk8、keytool-importkeypair、demo.jks、signature.sh&lt;/p&gt;
+&lt;p&gt;我的做法是在App根目录新建Signature文件夹专门存放签名相关文件。&lt;/p&gt;
+&lt;h4 id=&quot;步骤-1&quot;&gt;&lt;a href=&quot;#步骤-1&quot; class=&quot;headerlink&quot; title=&quot;步骤&quot;&gt;&lt;/a&gt;&lt;strong&gt;步骤&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;1、生成demo.jks签名文件&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/ConnorLin/BlogImages/raw/master/2016:04:27/generate_signed_apk.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/ConnorLin/BlogImages/raw/master/2016:04:27/genertate_signature.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;2、编写签名脚本signature.sh，内容如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+
+# 转换系统签名命令
+./keytool-importkeypair -k demo.jks -p 123456 -pk8 platform.pk8 -cert platform.x509.pem -alias demo
+
+# demo.jks : 签名文件
+# 123456 : 签名文件密码
+# platform.pk8、platform.x509.pem : 系统签名文件
+# demo : 签名文件别名
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;为脚本文件添加可执行权限：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo chmod a+x signature.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;执行脚本：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ ./signature.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;3、配置builde.gradle&lt;/p&gt;
+&lt;p&gt;在android区域下(与defaultConfig同级)添加配置：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;signingConfigs {
+    release {
+        storeFile file(&amp;quot;../signature/demo.jks&amp;quot;)
+        storePassword &amp;apos;123456&amp;apos;
+        keyAlias &amp;apos;demo&amp;apos;
+        keyPassword &amp;apos;123456&amp;apos;
+    }
+
+    debug {
+        storeFile file(&amp;quot;../signature/demo.jks&amp;quot;)
+        storePassword &amp;apos;123456&amp;apos;
+        keyAlias &amp;apos;demo&amp;apos;
+        keyPassword &amp;apos;123456&amp;apos;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这样debug或release apk就带有系统签名了。&lt;/p&gt;
+&lt;p&gt;如果想直接&lt;code&gt;Run app&lt;/code&gt;就是release版且带系统签名的apk，还需修改：&lt;/p&gt;
+&lt;p&gt;1) 变体app&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/ConnorLin/BlogImages/raw/master/2016:04:27/release_variant.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;2) 修改&lt;code&gt;buildTypes&lt;/code&gt;：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;buildTypes {
+    release {
+        minifyEnabled false
+        proguardFiles getDefaultProguardFile(&amp;apos;proguard-android.txt&amp;apos;), &amp;apos;proguard-rules.txt&amp;apos;
+        signingConfig signingConfigs.release
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这样直接&lt;code&gt;Run app&lt;/code&gt;就是带系统签名的release版apk了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;That’s all, Enjoy it!&lt;/strong&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;有时候，我们开发的apk需要用到系统权限，需要在AndroidManifest.xml中添加共享系统进程属性：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;android:sharedUserId=&amp;quot;android.uid.system&amp;quot;
+android:sharedUserId=&amp;quot;android.uid.shared&amp;quot;
+android:sharedUserId=&amp;quot;android.media&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这时候apk的签名就需要是系统签名(platform、shared或media)才能正常使用。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>你真的了解Android Notification吗?</title>
     <link href="https://github.com/ConnorLin/2016/04/21/%E4%BD%A0%E7%9C%9F%E7%9A%84%E4%BA%86%E8%A7%A3Android-Notification%E5%90%97/"/>
     <id>https://github.com/ConnorLin/2016/04/21/你真的了解Android-Notification吗/</id>
     <published>2016-04-21T13:51:01.000Z</published>
-    <updated>2016-04-21T14:06:54.000Z</updated>
+    <updated>2016-04-21T14:07:46.000Z</updated>
     
     <content type="html">&lt;p&gt;最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！&lt;/p&gt;
 &lt;h3 id=&quot;什么是通知-Notification&quot;&gt;&lt;a href=&quot;#什么是通知-Notification&quot; class=&quot;headerlink&quot; title=&quot;什么是通知(Notification)&quot;&gt;&lt;/a&gt;&lt;strong&gt;什么是通知(Notification)&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。&lt;br&gt;通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。&lt;/p&gt;
