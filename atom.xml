@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://github.com/ConnorLin/"/>
-  <updated>2016-04-28T05:11:47.000Z</updated>
+  <updated>2016-04-28T05:27:55.000Z</updated>
   <id>https://github.com/ConnorLin/</id>
   
   <author>
@@ -20,12 +20,12 @@
     <link href="https://github.com/ConnorLin/2016/04/28/%E4%BD%BF%E7%94%A8Android-Studio-%E8%BF%9B%E8%A1%8CNDK%E5%BC%80%E5%8F%91%E5%92%8C%E8%B0%83%E8%AF%95/"/>
     <id>https://github.com/ConnorLin/2016/04/28/使用Android-Studio-进行NDK开发和调试/</id>
     <published>2016-04-28T05:04:34.000Z</published>
-    <updated>2016-04-28T05:11:47.000Z</updated>
+    <updated>2016-04-28T05:27:55.000Z</updated>
     
     <content type="html">&lt;p&gt;尽管Android Studio已经越来越流行了，但很多人还是习惯于Eclipse或源码环境下开发JNI应用。个人认为使用Android Studio作NDK开发是必然趋势，所以本文将简单介绍如何在Android Studio上实现NDK开发。&lt;/p&gt;
 &lt;h3 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;&lt;strong&gt;简介&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;JNI&quot;&gt;&lt;a href=&quot;#JNI&quot; class=&quot;headerlink&quot; title=&quot;JNI&quot;&gt;&lt;/a&gt;&lt;strong&gt;JNI&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;JNI 是Java Native Inteface的缩写，是Java中定义的一种用于连接Java和C/C++接口的一种实现方式。&lt;/p&gt;
 &lt;h4 id=&quot;NDK&quot;&gt;&lt;a href=&quot;#NDK&quot; class=&quot;headerlink&quot; title=&quot;NDK&quot;&gt;&lt;/a&gt;&lt;strong&gt;NDK&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;NDK 是 Native Developmentit的缩写，是Google在Android开发中提供的一套用于快速创建native工程的一个工具。&lt;br&gt;使用这个工具可以很方便的编写和调试JNI的代码。&lt;/p&gt;
-&lt;p&gt;NDK可从&lt;a href=&quot;http://developer.android.com/ndk/downloads/index.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;官网&lt;/a&gt;或&lt;a href=&quot;http://www.androiddevtools.cn/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;AndroidDevTools&lt;/a&gt;(个人网站)下载。&lt;/p&gt;
+&lt;p&gt;NDK可从&lt;a href=&quot;http://developer.android.com/ndk/downloads/index.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;官网&lt;/a&gt;或&lt;a href=&quot;http://www.androiddevtools.cn/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;AndroidDevTools&lt;/a&gt;(个人网站)下载。&lt;br&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;h4 id=&quot;Gradle&quot;&gt;&lt;a href=&quot;#Gradle&quot; class=&quot;headerlink&quot; title=&quot;Gradle&quot;&gt;&lt;/a&gt;&lt;strong&gt;Gradle&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Gradle 是一个基于Apache Ant和Apache Maven概念的项目自动化建构工具。它使用一种基于Groovy的特定领域语言(DSL)来声明项目设置。  &lt;/p&gt;
 &lt;p&gt;以往Android NDK开发需要在Eclipse或源码环境下，建立并配置Android.mk和Application.mk，且还要通过java命令生成.h头文件，才能编译生成so库。但在Android Studio中这些步骤都不需要，因为Gradle足够强大，只需配置Gradle即可编译生成so库。&lt;/p&gt;
 &lt;h4 id=&quot;gradle-experimental插件&quot;&gt;&lt;a href=&quot;#gradle-experimental插件&quot; class=&quot;headerlink&quot; title=&quot;gradle-experimental插件&quot;&gt;&lt;/a&gt;&lt;strong&gt;gradle-experimental插件&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;在2015年5月的Google I/O大会上, Google宣布Android Studio开始支持NDK开发，通过和JetBrains的合作，将Clion整合进了Android Studio 1.3，并免费支持NDK C++开发。&lt;/p&gt;
@@ -135,7 +135,9 @@
     <summary type="html">
     
       &lt;p&gt;尽管Android Studio已经越来越流行了，但很多人还是习惯于Eclipse或源码环境下开发JNI应用。个人认为使用Android Studio作NDK开发是必然趋势，所以本文将简单介绍如何在Android Studio上实现NDK开发。&lt;/p&gt;
-&lt;h3 id=&quot;简介
+&lt;h3 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;&lt;strong&gt;简介&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;JNI&quot;&gt;&lt;a href=&quot;#JNI&quot; class=&quot;headerlink&quot; title=&quot;JNI&quot;&gt;&lt;/a&gt;&lt;strong&gt;JNI&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;JNI 是Java Native Inteface的缩写，是Java中定义的一种用于连接Java和C/C++接口的一种实现方式。&lt;/p&gt;
+&lt;h4 id=&quot;NDK&quot;&gt;&lt;a href=&quot;#NDK&quot; class=&quot;headerlink&quot; title=&quot;NDK&quot;&gt;&lt;/a&gt;&lt;strong&gt;NDK&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;NDK 是 Native Developmentit的缩写，是Google在Android开发中提供的一套用于快速创建native工程的一个工具。&lt;br&gt;使用这个工具可以很方便的编写和调试JNI的代码。&lt;/p&gt;
+&lt;p&gt;NDK可从&lt;a href=&quot;http://developer.android.com/ndk/downloads/index.html&quot;&gt;官网&lt;/a&gt;或&lt;a href=&quot;http://www.androiddevtools.cn/&quot;&gt;AndroidDevTools&lt;/a&gt;(个人网站)下载。&lt;br&gt;
     
     </summary>
     
