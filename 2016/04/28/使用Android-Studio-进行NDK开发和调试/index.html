@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Android, Android Studio, NDK, JNI," />
 
 
 
@@ -82,15 +82,32 @@
 
 
 
-<meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ConnorLin's Blog">
-<meta property="og:url" content="https://github.com/ConnorLin/index.html">
+<meta name="description" content="尽管Android Studio已经越来越流行了，但很多人还是习惯于Eclipse或源码环境下开发JNI应用。个人认为使用Android Studio作NDK开发是必然趋势，所以本文将简单介绍如何在Android Studio上实现NDK开发。
+简介JNIJNI 是Java Native Inteface的缩写，是Java中定义的一种用于连接Java和C/C++接口的一种实现方式。
+NDKNDK">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Android Studio 进行NDK开发和调试">
+<meta property="og:url" content="https://github.com/ConnorLin/2016/04/28/使用Android-Studio-进行NDK开发和调试/index.html">
 <meta property="og:site_name" content="ConnorLin's Blog">
-<meta property="og:description">
+<meta property="og:description" content="尽管Android Studio已经越来越流行了，但很多人还是习惯于Eclipse或源码环境下开发JNI应用。个人认为使用Android Studio作NDK开发是必然趋势，所以本文将简单介绍如何在Android Studio上实现NDK开发。
+简介JNIJNI 是Java Native Inteface的缩写，是Java中定义的一种用于连接Java和C/C++接口的一种实现方式。
+NDKNDK">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:28/settup_ndk.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:28/jni_func_warning.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:28/alt_enter.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:28/ndk_error.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:28/build_err.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ConnorLin/BlogImages/master/2016%3A04%3A28/open_jni_debugger.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ConnorLin/BlogImages/master/2016%3A04%3A28/edit_config.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/ConnorLin/BlogImages/master/2016%3A04%3A28/native_debugger.png">
+<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:28/debugger_fix.png">
+<meta property="og:updated_time" content="2016-04-28T05:11:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ConnorLin's Blog">
-<meta name="twitter:description">
+<meta name="twitter:title" content="使用Android Studio 进行NDK开发和调试">
+<meta name="twitter:description" content="尽管Android Studio已经越来越流行了，但很多人还是习惯于Eclipse或源码环境下开发JNI应用。个人认为使用Android Studio作NDK开发是必然趋势，所以本文将简单介绍如何在Android Studio上实现NDK开发。
+简介JNIJNI 是Java Native Inteface的缩写，是Java中定义的一种用于连接Java和C/C++接口的一种实现方式。
+NDKNDK">
+<meta name="twitter:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:28/settup_ndk.png">
 
 
 
@@ -108,7 +125,7 @@
   };
 </script>
 
-  <title> ConnorLin's Blog </title>
+  <title> 使用Android Studio 进行NDK开发和调试 | ConnorLin's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -148,9 +165,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left 
-   page-home 
- ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,9 +252,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
   
@@ -259,10 +274,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2016/04/28/使用Android-Studio-进行NDK开发和调试/" itemprop="url">
-                  使用Android Studio 进行NDK开发和调试
-                </a>
+                使用Android Studio 进行NDK开发和调试
               
             
           </h1>
@@ -317,6 +329,11 @@
           
 
           
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-file-o"></i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+              </span>
+          
         </div>
       </header>
     
@@ -328,9 +345,7 @@
       
 
       
-        
-          
-            <p>尽管Android Studio已经越来越流行了，但很多人还是习惯于Eclipse或源码环境下开发JNI应用。个人认为使用Android Studio作NDK开发是必然趋势，所以本文将简单介绍如何在Android Studio上实现NDK开发。</p>
+        <p>尽管Android Studio已经越来越流行了，但很多人还是习惯于Eclipse或源码环境下开发JNI应用。个人认为使用Android Studio作NDK开发是必然趋势，所以本文将简单介绍如何在Android Studio上实现NDK开发。</p>
 <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a><strong>简介</strong></h3><h4 id="JNI"><a href="#JNI" class="headerlink" title="JNI"></a><strong>JNI</strong></h4><p>JNI 是Java Native Inteface的缩写，是Java中定义的一种用于连接Java和C/C++接口的一种实现方式。</p>
 <h4 id="NDK"><a href="#NDK" class="headerlink" title="NDK"></a><strong>NDK</strong></h4><p>NDK 是 Native Developmentit的缩写，是Google在Android开发中提供的一套用于快速创建native工程的一个工具。<br>使用这个工具可以很方便的编写和调试JNI的代码。</p>
 <p>NDK可从<a href="http://developer.android.com/ndk/downloads/index.html" target="_blank" rel="external">官网</a>或<a href="http://www.androiddevtools.cn/" target="_blank" rel="external">AndroidDevTools</a>(个人网站)下载。</p>
@@ -439,562 +454,103 @@
 <p>4、完成NDK调试配置，可以正常调试了。</p>
 <p><strong>That’s all!</strong></p>
 
-          
-        
       
     </div>
     
     <div>
       
+        
+<div id="wechat_subscriber" style="display: block； padding: 10px 0; margin: 20px auto; width: 100%; text-align: center">
+    <img id="wechat_subscriber_qcode" src="/uploads/wechat-qcode.jpg" alt="ConnorLin wechat" style="width: 200px; max-width: 100%;"/>
+    <div>欢迎您扫一扫上面的微信公众号，订阅我的博客！</div>
+</div>
+
+      
     </div>
 
     <div>
+      
+        
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/27/让Android-Studio支持系统签名(证书)/" itemprop="url">
-                  让Android Studio支持系统签名
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-27T13:54:02+08:00" content="2016-04-27">
-              2016-04-27
-            </time>
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android-Studio/" itemprop="url" rel="index">
-                    <span itemprop="name">Android Studio</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/27/让Android-Studio支持系统签名(证书)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/27/让Android-Studio支持系统签名(证书)/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
+            <a href="/tags/Android-Android-Studio-NDK-JNI/" rel="tag">#Android, Android Studio, NDK, JNI</a>
           
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>有时候，我们开发的apk需要用到系统权限，需要在AndroidManifest.xml中添加共享系统进程属性：</p>
-<pre><code>android:sharedUserId=&quot;android.uid.system&quot;
-android:sharedUserId=&quot;android.uid.shared&quot;
-android:sharedUserId=&quot;android.media&quot;
-</code></pre><p>这时候apk的签名就需要是系统签名(platform、shared或media)才能正常使用。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/27/让Android-Studio支持系统签名(证书)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/27/让Android-Studio支持系统签名(证书)/" rel="next" title="让Android Studio支持系统签名">
+                <i class="fa fa-chevron-left"></i> 让Android Studio支持系统签名
+              </a>
+            
           </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
 
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
+          <div class="post-nav-prev post-nav-item">
             
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/21/你真的了解Android-Notification吗/" itemprop="url">
-                  你真的了解Android Notification吗?
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-21T21:51:01+08:00" content="2016-04-21">
-              2016-04-21
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android-Notification/" itemprop="url" rel="index">
-                    <span itemprop="name">Android Notification</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/21/你真的了解Android-Notification吗/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/21/你真的了解Android-Notification吗/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
+          </div>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          <p>最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！</p>
-<h3 id="什么是通知-Notification"><a href="#什么是通知-Notification" class="headerlink" title="什么是通知(Notification)"></a><strong>什么是通知(Notification)</strong></h3><p>通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。<br>通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。</p>
-<p>作为安卓用户界面的重要组成部分，通知有自己的设计指南。在Android 5.0(API level 21)中引入的 <a href="http://developer.android.com/training/material/index.html">Material Design</a> 的变化是特别重要的，更多信息请阅读 <a href="http://developer.android.com/design/patterns/notifications.html">通知设计指南</a>。</p>
-<h3 id="如何创建通知"><a href="#如何创建通知" class="headerlink" title="如何创建通知"></a><strong>如何创建通知</strong></h3><p>随着Android系统不断升级，Notification的创建方式也随之变化，主要变化如下:<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/21/你真的了解Android-Notification吗/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
+
+    <div class="post-spread">
       
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
 
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/15/Android应用使用Multidex突破64K方法数限制/" itemprop="url">
-                  Android应用使用Multidex突破64K方法数限制
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-15T13:30:59+08:00" content="2016-04-15">
-              2016-04-15
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/15/Android应用使用Multidex突破64K方法数限制/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/15/Android应用使用Multidex突破64K方法数限制/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a><strong>写在前面</strong></h4><p>前几天，开发中遇到一个问题，Log信息如下：</p>
-<pre><code>E/AndroidRuntime(10943): FATAL EXCEPTION: main
-E/AndroidRuntime(10943): Process: com.freeme.gallery, PID: 10943
-E/AndroidRuntime(10943): java.lang.NoClassDefFoundError: com.freeme.gallery.data.DataManager$DateTakenComparator
-E/AndroidRuntime(10943):     at com.freeme.gallery.data.DataManager.&lt;clinit&gt;(DataManager.java:65)
-E/AndroidRuntime(10943):     at com.freeme.gallery.app.GalleryAppImpl.getDataManager(GalleryAppImpl.java:77)
-E/AndroidRuntime(10943):     at com.freeme.gallery.provider.GalleryProvider.onCreate(GalleryProvider.java:101)
-E/AndroidRuntime(10943):     at android.content.ContentProvider.attachInfo(ContentProvider.java:1656)
-E/AndroidRuntime(10943):     at android.content.ContentProvider.attachInfo(ContentProvider.java:1627)
-E/AndroidRuntime(10943):     at android.app.ActivityThread.installProvider(ActivityThread.java:5060)
-E/AndroidRuntime(10943):     at android.app.ActivityThread.installContentProviders(ActivityThread.java:4634)
-E/AndroidRuntime(10943):     at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4567)
-E/AndroidRuntime(10943):     at android.app.ActivityThread.access$1500(ActivityThread.java:153)
-E/AndroidRuntime(10943):     at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1404)
-E/AndroidRuntime(10943):     at android.os.Handler.dispatchMessage(Handler.java:110)
-E/AndroidRuntime(10943):     at android.os.Looper.loop(Looper.java:193)
-E/AndroidRuntime(10943):     at android.app.ActivityThread.main(ActivityThread.java:5351)
-E/AndroidRuntime(10943):     at java.lang.reflect.Method.invokeNative(Native Method)
-E/AndroidRuntime(10943):     at java.lang.reflect.Method.invoke(Method.java:515)
-E/AndroidRuntime(10943):     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:835)
-E/AndroidRuntime(10943):     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:651)
-E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
-</code></pre>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/15/Android应用使用Multidex突破64K方法数限制/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
       
     </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/02/使用Hexo＋Github Pages 来搭建免费的专属博客/" itemprop="url">
-                  使用Hexo＋Github Pages 来搭建免费的专属博客
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-02T22:33:20+08:00" content="2016-04-02">
-              2016-04-02
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/教程/" itemprop="url" rel="index">
-                    <span itemprop="name">教程</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/02/使用Hexo＋Github Pages 来搭建免费的专属博客/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/02/使用Hexo＋Github Pages 来搭建免费的专属博客/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a><strong>一、简介</strong></h3><h4 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h4><p><a href="https://hexo.io/docs/">Hexo</a>是一个开源的静态博客框架,基于node.js开发,作者是台湾大学生tommy351。</p>
-<h4 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h4><p>如果是程序员肯定知道，<a href="https://github.com">Github</a>是开源代码库以及版本控制系统。在GitHub，用户可以十分轻易地找到海量的开源代码。</p>
-<h4 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h4><p><a href="https://help.github.com/articles/what-are-github-pages/">Github Pages</a>可以理解为用户编写的、托管在github上的静态网页，你只需将你的改动提交到Github，就可以实现更改你的网页。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/02/使用Hexo＋Github Pages 来搭建免费的专属博客/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
           
 
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/04/28/使用Android-Studio-进行NDK开发和调试/"
+           data-title="使用Android Studio 进行NDK开发和调试" data-url="https://github.com/ConnorLin/2016/04/28/使用Android-Studio-进行NDK开发和调试/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -1014,8 +570,17 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
@@ -1083,6 +648,17 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JNI"><span class="nav-number">1.1.</span> <span class="nav-text">JNI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NDK"><span class="nav-number">1.2.</span> <span class="nav-text">NDK</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Gradle"><span class="nav-number">1.3.</span> <span class="nav-text">Gradle</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gradle-experimental插件"><span class="nav-number">1.4.</span> <span class="nav-text">gradle-experimental插件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Experimental插件进行NDK开发"><span class="nav-number">2.</span> <span class="nav-text">使用Experimental插件进行NDK开发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用Experimental插件的必要条件"><span class="nav-number">2.1.</span> <span class="nav-text">使用Experimental插件的必要条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NDK开发步骤"><span class="nav-number">2.2.</span> <span class="nav-text">NDK开发步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#gradle-wrapper-gradle-wrapper-properties"><span class="nav-number">2.2.1.</span> <span class="nav-text">./gradle/wrapper/gradle-wrapper.properties</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#build-gradle"><span class="nav-number">2.2.2.</span> <span class="nav-text">./build.gradle</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#app-build-gradle"><span class="nav-number">2.2.3.</span> <span class="nav-text">./app/build.gradle</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#换种方式进行NDK开发"><span class="nav-number">3.</span> <span class="nav-text">换种方式进行NDK开发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#步骤"><span class="nav-number">3.1.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#副作用"><span class="nav-number">3.2.</span> <span class="nav-text">副作用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NDK调试"><span class="nav-number">4.</span> <span class="nav-text">NDK调试</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -1195,6 +771,10 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
 
   
 
