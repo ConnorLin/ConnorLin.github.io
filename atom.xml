@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://github.com/ConnorLin/"/>
-  <updated>2016-04-28T05:27:55.000Z</updated>
+  <updated>2016-04-28T13:17:13.000Z</updated>
   <id>https://github.com/ConnorLin/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://github.com/ConnorLin/2016/04/28/%E4%BD%BF%E7%94%A8Android-Studio-%E8%BF%9B%E8%A1%8CNDK%E5%BC%80%E5%8F%91%E5%92%8C%E8%B0%83%E8%AF%95/"/>
     <id>https://github.com/ConnorLin/2016/04/28/使用Android-Studio-进行NDK开发和调试/</id>
     <published>2016-04-28T05:04:34.000Z</published>
-    <updated>2016-04-28T05:27:55.000Z</updated>
+    <updated>2016-04-28T13:17:13.000Z</updated>
     
     <content type="html">&lt;p&gt;尽管Android Studio已经越来越流行了，但很多人还是习惯于Eclipse或源码环境下开发JNI应用。个人认为使用Android Studio作NDK开发是必然趋势，所以本文将简单介绍如何在Android Studio上实现NDK开发。&lt;/p&gt;
 &lt;h3 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;&lt;strong&gt;简介&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;JNI&quot;&gt;&lt;a href=&quot;#JNI&quot; class=&quot;headerlink&quot; title=&quot;JNI&quot;&gt;&lt;/a&gt;&lt;strong&gt;JNI&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;JNI 是Java Native Inteface的缩写，是Java中定义的一种用于连接Java和C/C++接口的一种实现方式。&lt;/p&gt;
@@ -130,6 +130,8 @@
 &lt;p&gt;点击 Fix，提示下载LLDB 2.0，照做，下载安装即可。&lt;/p&gt;
 &lt;p&gt;4、完成NDK调试配置，可以正常调试了。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;That’s all!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;原创文章，欢迎转载，转载请注明出处&lt;/center&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;我的简书账号是ConnorLin，欢迎光临！&lt;/center&gt;&lt;/strong&gt;&lt;/p&gt;
 </content>
     
     <summary type="html">
@@ -153,7 +155,7 @@
     <link href="https://github.com/ConnorLin/2016/04/27/%E8%AE%A9Android-Studio%E6%94%AF%E6%8C%81%E7%B3%BB%E7%BB%9F%E7%AD%BE%E5%90%8D(%E8%AF%81%E4%B9%A6)/"/>
     <id>https://github.com/ConnorLin/2016/04/27/让Android-Studio支持系统签名(证书)/</id>
     <published>2016-04-27T05:54:02.000Z</published>
-    <updated>2016-04-27T06:38:30.000Z</updated>
+    <updated>2016-04-28T13:17:20.000Z</updated>
     
     <content type="html">&lt;p&gt;有时候，我们开发的apk需要用到系统权限，需要在AndroidManifest.xml中添加共享系统进程属性：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;android:sharedUserId=&amp;quot;android.uid.system&amp;quot;
@@ -233,6 +235,8 @@ android:sharedUserId=&amp;quot;android.media&amp;quot;
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;这样直接&lt;code&gt;Run app&lt;/code&gt;就是带系统签名的release版apk了。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;That’s all, Enjoy it!&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;原创文章，欢迎转载，转载请注明出处&lt;/center&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;我的简书账号是ConnorLin，欢迎光临！&lt;/center&gt;&lt;/strong&gt;&lt;/p&gt;
 </content>
     
     <summary type="html">
@@ -257,7 +261,7 @@ android:sharedUserId=&amp;quot;android.media&amp;quot;
     <link href="https://github.com/ConnorLin/2016/04/21/%E4%BD%A0%E7%9C%9F%E7%9A%84%E4%BA%86%E8%A7%A3Android-Notification%E5%90%97/"/>
     <id>https://github.com/ConnorLin/2016/04/21/你真的了解Android-Notification吗/</id>
     <published>2016-04-21T13:51:01.000Z</published>
-    <updated>2016-04-21T14:07:46.000Z</updated>
+    <updated>2016-04-28T13:17:24.000Z</updated>
     
     <content type="html">&lt;p&gt;最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！&lt;/p&gt;
 &lt;h3 id=&quot;什么是通知-Notification&quot;&gt;&lt;a href=&quot;#什么是通知-Notification&quot; class=&quot;headerlink&quot; title=&quot;什么是通知(Notification)&quot;&gt;&lt;/a&gt;&lt;strong&gt;什么是通知(Notification)&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。&lt;br&gt;通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。&lt;/p&gt;
@@ -559,7 +563,8 @@ mNotificationManager.notify(id, builder.build());
 &lt;p&gt;更多Notification属性详见&lt;a href=&quot;http://developer.android.com/reference/android/app/Notification.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Notification&lt;/a&gt;。&lt;/p&gt;
 &lt;p&gt;That’s all！ 更多通知知识点等待你来发掘，欢迎补充!  &lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;参考资料&lt;/strong&gt;&lt;br&gt;&lt;a href=&quot;http://developer.android.com/guide/topics/ui/notifiers/notifications.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Notifications&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;原创文章，欢迎转载，转载请注明出处&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;原创文章，欢迎转载，转载请注明出处&lt;/center&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;我的简书账号是ConnorLin，欢迎光临！&lt;/center&gt;&lt;/strong&gt;&lt;/p&gt;
 </content>
     
     <summary type="html">
@@ -583,7 +588,7 @@ mNotificationManager.notify(id, builder.build());
     <link href="https://github.com/ConnorLin/2016/04/15/Android%E5%BA%94%E7%94%A8%E4%BD%BF%E7%94%A8Multidex%E7%AA%81%E7%A0%B464K%E6%96%B9%E6%B3%95%E6%95%B0%E9%99%90%E5%88%B6/"/>
     <id>https://github.com/ConnorLin/2016/04/15/Android应用使用Multidex突破64K方法数限制/</id>
     <published>2016-04-15T05:30:59.000Z</published>
-    <updated>2016-04-18T05:48:12.000Z</updated>
+    <updated>2016-04-28T13:17:03.000Z</updated>
     
     <content type="html">&lt;h4 id=&quot;写在前面&quot;&gt;&lt;a href=&quot;#写在前面&quot; class=&quot;headerlink&quot; title=&quot;写在前面&quot;&gt;&lt;/a&gt;&lt;strong&gt;写在前面&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;前几天，开发中遇到一个问题，Log信息如下：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;E/AndroidRuntime(10943): FATAL EXCEPTION: main
@@ -758,6 +763,8 @@ dependencies {
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;备注：文中链接为官方链接，请爬墙观看！&lt;/strong&gt;  &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;原创文章，欢迎转载，转载请注明出处&lt;/center&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;我的简书账号是ConnorLin，欢迎光临！&lt;/center&gt;&lt;/strong&gt;&lt;/p&gt;
 </content>
     
     <summary type="html">
@@ -800,7 +807,7 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
     <link href="https://github.com/ConnorLin/2016/04/02/%E4%BD%BF%E7%94%A8Hexo%EF%BC%8BGithub%20Pages%20%E6%9D%A5%E6%90%AD%E5%BB%BA%E5%85%8D%E8%B4%B9%E7%9A%84%E4%B8%93%E5%B1%9E%E5%8D%9A%E5%AE%A2/"/>
     <id>https://github.com/ConnorLin/2016/04/02/使用Hexo＋Github Pages 来搭建免费的专属博客/</id>
     <published>2016-04-02T14:33:20.000Z</published>
-    <updated>2016-04-15T05:08:37.000Z</updated>
+    <updated>2016-04-28T13:17:43.000Z</updated>
     
     <content type="html">&lt;h3 id=&quot;一、简介&quot;&gt;&lt;a href=&quot;#一、简介&quot; class=&quot;headerlink&quot; title=&quot;一、简介&quot;&gt;&lt;/a&gt;&lt;strong&gt;一、简介&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;Hexo&quot;&gt;&lt;a href=&quot;#Hexo&quot; class=&quot;headerlink&quot; title=&quot;Hexo&quot;&gt;&lt;/a&gt;Hexo&lt;/h4&gt;&lt;p&gt;&lt;a href=&quot;https://hexo.io/docs/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;是一个开源的静态博客框架,基于node.js开发,作者是台湾大学生tommy351。&lt;/p&gt;
 &lt;h4 id=&quot;Github&quot;&gt;&lt;a href=&quot;#Github&quot; class=&quot;headerlink&quot; title=&quot;Github&quot;&gt;&lt;/a&gt;Github&lt;/h4&gt;&lt;p&gt;如果是程序员肯定知道，&lt;a href=&quot;https://github.com&quot;&gt;Github&lt;/a&gt;是开源代码库以及版本控制系统。在GitHub，用户可以十分轻易地找到海量的开源代码。&lt;/p&gt;
@@ -850,6 +857,8 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
 &lt;p&gt;5、将修改后的地址用于博客即可，大功告成！&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;至此，博客基础框架搭建完毕，Enjoy it！&lt;/strong&gt;&lt;/p&gt;
 &lt;h3 id=&quot;参考资料&quot;&gt;&lt;a href=&quot;#参考资料&quot; class=&quot;headerlink&quot; title=&quot;参考资料&quot;&gt;&lt;/a&gt;&lt;strong&gt;参考资料&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;1、&lt;a href=&quot;http://ibruce.info/2013/11/22/hexo-your-blog/?utm_source=tuicool&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;hexo你的博客&lt;/a&gt;&lt;br&gt;2、&lt;a href=&quot;http://www.jianshu.com/p/465830080ea9&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;HEXO+Github,搭建属于自己的博客&lt;/a&gt;&lt;br&gt;3、&lt;a href=&quot;https://help.github.com/categories/github-pages-basics/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Github Help&lt;/a&gt;&lt;br&gt;4、&lt;a href=&quot;http://www.jianshu.com/p/15ae47eddc56&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;小白独立搭建博客–Github Pages和Hexo简明教程&lt;/a&gt;&lt;br&gt;5、&lt;a href=&quot;http://www.jianshu.com/p/aa30cc25c91b&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Sublime插件：Markdown篇&lt;/a&gt;&lt;br&gt;6、&lt;a href=&quot;http://jingpin.jikexueyuan.com/article/36279.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;迁移博客图片者的福音：使用GitHub做免费不限流量图床&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;原创文章，欢迎转载，转载请注明出处&lt;/center&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;center&gt;我的简书账号是ConnorLin，欢迎光临！&lt;/center&gt;&lt;/strong&gt;&lt;/p&gt;
 </content>
     
     <summary type="html">
