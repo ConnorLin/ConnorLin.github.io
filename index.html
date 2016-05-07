@@ -260,6 +260,133 @@
             
               
                 
+                <a class="post-title-link" href="/2016/05/07/Android-Studio-Run-app-报错/" itemprop="url">
+                  Android Studio Run app 报错
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-07T19:13:18+08:00" content="2016-05-07">
+              2016-05-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android-Studio/" itemprop="url" rel="index">
+                    <span itemprop="name">Android Studio</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/07/Android-Studio-Run-app-报错/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/07/Android-Studio-Run-app-报错/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h2><p>今天在码代码时遇到一个莫名其妙的问题，问题是这样的：</p>
+<p>不论 clean project、rebuild project 还是 make module 都能顺利执行，但是只要 Run app 就会报如下错误</p>
+<pre><code>Error:Execution failed for task &apos;:app:transformClassesWithDexForDebug&apos;.
+&gt; com.android.build.api.transform.TransformException: com.android.ide.common.process.ProcessException: org.gradle.process.internal.ExecException: Process &apos;command &apos;/home/connorlin/Program/jdk1.7.0_71/bin/java&apos;&apos; finished with non-zero exit value 134
+</code></pre><h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a><strong>问题分析</strong></h2><p>通常，看到 <code>with non-zero exit value 134</code> 首先想到的是依赖冲突了，但细心点能发现，依赖冲突一般是<code>with non-zero exit value 1</code> 或 <code>with non-zero exit value 2</code>，此处却是<code>134</code>。</p>
+<p>再看<code>Process &#39;command &#39;/home/connorlin/Program/jdk1.7.0_71/bin/java&#39;&#39; finished with non-zero exit value 134</code> 似乎是JDK相关。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/05/07/Android-Studio-Run-app-报错/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+    
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/06/Markdown的常用语法(个人总结)/" itemprop="url">
                   Markdown的常用语法(个人总结)
                 </a>
@@ -741,150 +868,6 @@ android:sharedUserId=&quot;android.media&quot;
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/15/Android应用使用Multidex突破64K方法数限制/" itemprop="url">
-                  Android应用使用Multidex突破64K方法数限制
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-15T13:30:59+08:00" content="2016-04-15">
-              2016-04-15
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/15/Android应用使用Multidex突破64K方法数限制/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/15/Android应用使用Multidex突破64K方法数限制/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a><strong>写在前面</strong></h4><p>前几天，开发中遇到一个问题，Log信息如下：</p>
-<pre><code>E/AndroidRuntime(10943): FATAL EXCEPTION: main
-E/AndroidRuntime(10943): Process: com.freeme.gallery, PID: 10943
-E/AndroidRuntime(10943): java.lang.NoClassDefFoundError: com.freeme.gallery.data.DataManager$DateTakenComparator
-E/AndroidRuntime(10943):     at com.freeme.gallery.data.DataManager.&lt;clinit&gt;(DataManager.java:65)
-E/AndroidRuntime(10943):     at com.freeme.gallery.app.GalleryAppImpl.getDataManager(GalleryAppImpl.java:77)
-E/AndroidRuntime(10943):     at com.freeme.gallery.provider.GalleryProvider.onCreate(GalleryProvider.java:101)
-E/AndroidRuntime(10943):     at android.content.ContentProvider.attachInfo(ContentProvider.java:1656)
-E/AndroidRuntime(10943):     at android.content.ContentProvider.attachInfo(ContentProvider.java:1627)
-E/AndroidRuntime(10943):     at android.app.ActivityThread.installProvider(ActivityThread.java:5060)
-E/AndroidRuntime(10943):     at android.app.ActivityThread.installContentProviders(ActivityThread.java:4634)
-E/AndroidRuntime(10943):     at android.app.ActivityThread.handleBindApplication(ActivityThread.java:4567)
-E/AndroidRuntime(10943):     at android.app.ActivityThread.access$1500(ActivityThread.java:153)
-E/AndroidRuntime(10943):     at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1404)
-E/AndroidRuntime(10943):     at android.os.Handler.dispatchMessage(Handler.java:110)
-E/AndroidRuntime(10943):     at android.os.Looper.loop(Looper.java:193)
-E/AndroidRuntime(10943):     at android.app.ActivityThread.main(ActivityThread.java:5351)
-E/AndroidRuntime(10943):     at java.lang.reflect.Method.invokeNative(Native Method)
-E/AndroidRuntime(10943):     at java.lang.reflect.Method.invoke(Method.java:515)
-E/AndroidRuntime(10943):     at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:835)
-E/AndroidRuntime(10943):     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:651)
-E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
-</code></pre>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/15/Android应用使用Multidex突破64K方法数限制/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -930,7 +913,7 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -938,7 +921,7 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -947,7 +930,7 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

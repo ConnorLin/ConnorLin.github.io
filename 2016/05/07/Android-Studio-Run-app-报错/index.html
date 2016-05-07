@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android Studio, Signature," />
+  <meta name="keywords" content="Android Studio," />
 
 
 
@@ -82,29 +82,25 @@
 
 
 
-<meta name="description" content="有时候，我们开发的apk需要用到系统权限，需要在AndroidManifest.xml中添加共享系统进程属性：
-android:sharedUserId=&amp;quot;android.uid.system&amp;quot;
-android:sharedUserId=&amp;quot;android.uid.shared&amp;quot;
-android:sharedUserId=&amp;quot;android.media">
+<meta name="description" content="问题描述今天在码代码时遇到一个莫名其妙的问题，问题是这样的：
+不论 clean project、rebuild project 还是 make module 都能顺利执行，但是只要 Run app 就会报如下错误
+Error:Execution failed for task &amp;apos;:app:transformClassesWithDexForDebug&amp;apos;.
+&amp;gt; com.an">
 <meta property="og:type" content="article">
-<meta property="og:title" content="让Android Studio支持系统签名">
-<meta property="og:url" content="https://github.com/ConnorLin/2016/04/27/让Android-Studio支持系统签名(证书)/index.html">
+<meta property="og:title" content="Android Studio Run app 报错">
+<meta property="og:url" content="https://github.com/ConnorLin/2016/05/07/Android-Studio-Run-app-报错/index.html">
 <meta property="og:site_name" content="ConnorLin's Blog">
-<meta property="og:description" content="有时候，我们开发的apk需要用到系统权限，需要在AndroidManifest.xml中添加共享系统进程属性：
-android:sharedUserId=&amp;quot;android.uid.system&amp;quot;
-android:sharedUserId=&amp;quot;android.uid.shared&amp;quot;
-android:sharedUserId=&amp;quot;android.media">
-<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:27/generate_signed_apk.png">
-<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:27/genertate_signature.png">
-<meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:27/release_variant.png">
-<meta property="og:updated_time" content="2016-04-28T13:17:20.000Z">
+<meta property="og:description" content="问题描述今天在码代码时遇到一个莫名其妙的问题，问题是这样的：
+不论 clean project、rebuild project 还是 make module 都能顺利执行，但是只要 Run app 就会报如下错误
+Error:Execution failed for task &amp;apos;:app:transformClassesWithDexForDebug&amp;apos;.
+&amp;gt; com.an">
+<meta property="og:updated_time" content="2016-05-07T11:18:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="让Android Studio支持系统签名">
-<meta name="twitter:description" content="有时候，我们开发的apk需要用到系统权限，需要在AndroidManifest.xml中添加共享系统进程属性：
-android:sharedUserId=&amp;quot;android.uid.system&amp;quot;
-android:sharedUserId=&amp;quot;android.uid.shared&amp;quot;
-android:sharedUserId=&amp;quot;android.media">
-<meta name="twitter:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:27/generate_signed_apk.png">
+<meta name="twitter:title" content="Android Studio Run app 报错">
+<meta name="twitter:description" content="问题描述今天在码代码时遇到一个莫名其妙的问题，问题是这样的：
+不论 clean project、rebuild project 还是 make module 都能顺利执行，但是只要 Run app 就会报如下错误
+Error:Execution failed for task &amp;apos;:app:transformClassesWithDexForDebug&amp;apos;.
+&amp;gt; com.an">
 
 
 
@@ -122,7 +118,7 @@ android:sharedUserId=&amp;quot;android.media">
   };
 </script>
 
-  <title> 让Android Studio支持系统签名 | ConnorLin's Blog </title>
+  <title> Android Studio Run app 报错 | ConnorLin's Blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -271,7 +267,7 @@ android:sharedUserId=&amp;quot;android.media">
             
             
               
-                让Android Studio支持系统签名
+                Android Studio Run app 报错
               
             
           </h1>
@@ -283,8 +279,8 @@ android:sharedUserId=&amp;quot;android.media">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-27T13:54:02+08:00" content="2016-04-27">
-              2016-04-27
+            <time itemprop="dateCreated" datetime="2016-05-07T19:13:18+08:00" content="2016-05-07">
+              2016-05-07
             </time>
           </span>
 
@@ -313,8 +309,8 @@ android:sharedUserId=&amp;quot;android.media">
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/04/27/让Android-Studio支持系统签名(证书)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/27/让Android-Studio支持系统签名(证书)/" itemprop="commentsCount"></span>
+                <a href="/2016/05/07/Android-Studio-Run-app-报错/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/07/Android-Studio-Run-app-报错/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -342,86 +338,105 @@ android:sharedUserId=&amp;quot;android.media">
       
 
       
-        <p>有时候，我们开发的apk需要用到系统权限，需要在AndroidManifest.xml中添加共享系统进程属性：</p>
-<pre><code>android:sharedUserId=&quot;android.uid.system&quot;
-android:sharedUserId=&quot;android.uid.shared&quot;
-android:sharedUserId=&quot;android.media&quot;
-</code></pre><p>这时候apk的签名就需要是系统签名(platform、shared或media)才能正常使用。</p>
+        <h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h2><p>今天在码代码时遇到一个莫名其妙的问题，问题是这样的：</p>
+<p>不论 clean project、rebuild project 还是 make module 都能顺利执行，但是只要 Run app 就会报如下错误</p>
+<pre><code>Error:Execution failed for task &apos;:app:transformClassesWithDexForDebug&apos;.
+&gt; com.android.build.api.transform.TransformException: com.android.ide.common.process.ProcessException: org.gradle.process.internal.ExecException: Process &apos;command &apos;/home/connorlin/Program/jdk1.7.0_71/bin/java&apos;&apos; finished with non-zero exit value 134
+</code></pre><h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a><strong>问题分析</strong></h2><p>通常，看到 <code>with non-zero exit value 134</code> 首先想到的是依赖冲突了，但细心点能发现，依赖冲突一般是<code>with non-zero exit value 1</code> 或 <code>with non-zero exit value 2</code>，此处却是<code>134</code>。</p>
+<p>再看<code>Process &#39;command &#39;/home/connorlin/Program/jdk1.7.0_71/bin/java&#39;&#39; finished with non-zero exit value 134</code> 似乎是JDK相关。</p>
 <a id="more"></a>
-<h3 id="常用系统签名方式"><a href="#常用系统签名方式" class="headerlink" title="常用系统签名方式"></a><strong>常用系统签名方式</strong></h3><h4 id="Android源码环境下签名"><a href="#Android源码环境下签名" class="headerlink" title="Android源码环境下签名"></a><strong>Android源码环境下签名</strong></h4><p>这种方式比较麻烦，你需要有编译过的源码环境，并按如下步骤：</p>
-<p>1、拷贝App源码到Android源码的<code>packages/apps/</code>目录下，且App源码是普通(Eclipse)格式的<br>2、配置Android.mk，在其中添加</p>
-<pre><code>LOCAL_CERTIFICATE := platform 或 shared 或 media
-</code></pre><p>3、使用<code>mm</code>编译App，生成的apk即系统签名</p>
-<hr>
-<h4 id="手动重新签名"><a href="#手动重新签名" class="headerlink" title="手动重新签名"></a><strong>手动重新签名</strong></h4><p>这种方式比在源码环境下签名简单，App可以在Eclipse或Android Studio下编译，然后给apk重新签名即可。<br>但这种方式在频繁调试的时候比较痛苦，即使写成脚本，也需要重复一样的操作。</p>
-<h5 id="相关文件"><a href="#相关文件" class="headerlink" title="相关文件"></a><strong>相关文件</strong></h5><p>platform.x509.pem、platform.pk8、signapk.jar</p>
-<h5 id="文件位置"><a href="#文件位置" class="headerlink" title="文件位置"></a><strong>文件位置</strong></h5><p>platform.x509.pem、platform.pk8:  </p>
-<pre><code>../build/target/product/security
-</code></pre><p>signapk.jar:  </p>
-<pre><code>../out/host/linux-x86/framework
-</code></pre><p>signapk源码路径:  </p>
-<pre><code>../build/tools/signapk
-</code></pre><h5 id="签名命令"><a href="#签名命令" class="headerlink" title="签名命令"></a><strong>签名命令</strong></h5><pre><code>java -jar signapk.jar platform.x509.pem platform.pk8 old.apk new.apk
-</code></pre><h5 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a><strong>步骤</strong></h5><p>1、将相关文件及源apk文件置于同一路径下<br>2、检查源apk包，去掉<code>META-INF/CERT.SF</code> 和 <code>META-INF/CERT.RSA</code> 文件<br>3、执行签名命令即可</p>
-<hr>
-<h3 id="Android-Studio系统签名"><a href="#Android-Studio系统签名" class="headerlink" title="Android Studio系统签名"></a><strong>Android Studio系统签名</strong></h3><p>让Android Studio集成系统签名，需要用到一个工具<code>keytool-importkeypair</code>，详见下文。</p>
-<h4 id="keytool-importkeypair"><a href="#keytool-importkeypair" class="headerlink" title="keytool-importkeypair"></a><strong>keytool-importkeypair</strong></h4><blockquote>
-<p>keytool-importkeypair – A shell script to import key/certificate pairs into an existing Java keystore</p>
-</blockquote>
-<p>这个工具的作用是将系统签名的相关信息导入到已有的签名文件里。可从<a href="https://github.com/getfatday/keytool-importkeypair">这里</a>下载。</p>
-<p>工具的使用方法可以通过–help或README.textile来寻求帮助，或参考<a href="http://czj4451.iteye.com/blog/1487684" target="_blank" rel="external">使用keytool工具</a> 这篇文章。</p>
-<h4 id="相关文件-1"><a href="#相关文件-1" class="headerlink" title="相关文件"></a><strong>相关文件</strong></h4><p>platform.x509.pem、platform.pk8、keytool-importkeypair、demo.jks、signature.sh</p>
-<p>我的做法是在App根目录新建Signature文件夹专门存放签名相关文件。</p>
-<h4 id="步骤-1"><a href="#步骤-1" class="headerlink" title="步骤"></a><strong>步骤</strong></h4><p>1、生成demo.jks签名文件</p>
-<p><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:27/generate_signed_apk.png" alt=""></p>
-<p><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:27/genertate_signature.png" alt=""></p>
-<p>2、编写签名脚本signature.sh，内容如下：</p>
-<pre><code>#!/bin/sh
+<p>那么，首先排除依赖冲突，因为之前是正常的，代码又没任何改动，是突然出现报错。再看到JDK，检查是否JDK配置出问题了，因为我同时装了<code>sun JDK</code> 和 <code>OpenJDK</code>。</p>
+<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a><strong>问题定位</strong></h2><h3 id="一次定位"><a href="#一次定位" class="headerlink" title="一次定位"></a><strong>一次定位</strong></h3><p>开始查看java 版本：</p>
+<pre><code>java -version
+</code></pre><p>结果显示：</p>
+<pre><code>java version &quot;1.7.0_75&quot;
+OpenJDK Runtime Environment (IcedTea 2.5.4) (7u75-2.5.4-1~trusty1)
+OpenJDK 64-Bit Server VM (build 24.75-b04, mixed mode)
+</code></pre><p>再看：</p>
+<pre><code>update-alternatives --config java
+</code></pre><p>结果显示：</p>
+<pre><code>有 3 个候选项可用于替换 java (提供 /usr/bin/java)。
 
-# 转换系统签名命令
-./keytool-importkeypair -k demo.jks -p 123456 -pk8 platform.pk8 -cert platform.x509.pem -alias demo
+  选择       路径                                          优先级  状态
+------------------------------------------------------------
+  0            /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java   1071      自动模式
+* 1            /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java   1071      手动模式
+  2            /usr/local/jdk/bin/java                          255       手动模式
+  3            /usr/local/jdk1.6.0_30/bin/java                  255       手动模式
 
-# demo.jks : 签名文件
-# 123456 : 签名文件密码
-# platform.pk8、platform.x509.pem : 系统签名文件
-# demo : 签名文件别名
-</code></pre><p>为脚本文件添加可执行权限：</p>
-<pre><code>$ sudo chmod a+x signature.sh
-</code></pre><p>执行脚本：</p>
-<pre><code>$ ./signature.sh
-</code></pre><p>3、配置builde.gradle</p>
-<p>在android区域下(与defaultConfig同级)添加配置：</p>
-<pre><code>signingConfigs {
-    release {
-        storeFile file(&quot;../signature/demo.jks&quot;)
-        storePassword &apos;123456&apos;
-        keyAlias &apos;demo&apos;
-        keyPassword &apos;123456&apos;
-    }
+要维持当前值[*]请按回车键，或者键入选择的编号：
+</code></pre><p>  证明JDK环境配置没错。</p>
+<p>  接着，把Android Studio JDK改为OpenJDK：</p>
+<pre><code>/home/connorlin/Program/jdk1.7.0_71
+改为
+/usr/lib/jvm/java-7-openjdk-amd64
+</code></pre><p>再次编译 Run app，再次报错，但本次报错与上次不一样：</p>
+<pre><code>Error:Failed to complete Gradle execution.
+Cause:
+Gradle build daemon disappeared unexpectedly (it may have been killed or may have crashed)
+</code></pre><p>居然<code>Gradle build daemon</code> 异常，那肯定不是代码的问题了。</p>
+<h3 id="二次定位"><a href="#二次定位" class="headerlink" title="二次定位"></a><strong>二次定位</strong></h3><p>后来，无意中发现在项目跟路径下有多个类似<code>hs_err_pid11776.log</code> 文件，其内容节选如下：</p>
+<pre><code>#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007fcac7773d44, pid=11776, tid=140508865505024
+#
+# JRE version: OpenJDK Runtime Environment (7.0_75-b13) (build 1.7.0_75-b13)
+# Java VM: OpenJDK 64-Bit Server VM (24.75-b04 mixed mode linux-amd64 compressed oops)
+# Derivative: IcedTea 2.5.4
+# Distribution: Ubuntu 14.04 LTS, package 7u75-2.5.4-1~trusty1
+# Problematic frame:
+# V  [libjvm.so+0x82ad44]  MoveAndUpdateClosure::do_addr(HeapWord*, unsigned long)+0xa4
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try &quot;ulimit -c unlimited&quot; before starting Java again
+#
+# If you would like to submit a bug report, please include
+# instructions on how to reproduce the bug and visit:
+#   http://icedtea.classpath.org/bugzilla
+#
 
-    debug {
-        storeFile file(&quot;../signature/demo.jks&quot;)
-        storePassword &apos;123456&apos;
-        keyAlias &apos;demo&apos;
-        keyPassword &apos;123456&apos;
-    }
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007fcac0023800):  GCTaskThread [stack: 0x00007fcac4f42000,0x00007fcac5043000] [id=11785]
+
+siginfo:si_signo=SIGSEGV: si_errno=0, si_code=1 (SEGV_MAPERR), si_addr=0x00000000007d0038
+
+Registers:
+RAX=0x00000000007d0020, RBX=0x00007fcac5041cb0, RCX=0x0000000000000000, RDX=0x00000000007d0020
+RSP=0x00007fcac5041ba0, RBP=0x00007fcac5041be0, RSI=0x00000000007d0020, RDI=0x00000000c47529c0
+R8 =0x00007fcaa5800000, R9 =0x00007fcac7d0b420, R10=0x00000000030c9100, R11=0x00007fcac850f810
+R12=0x0000000000000001, R13=0x0000000000000008, R14=0x00007fcac007abe0, R15=0x00000000c47529b8
+RIP=0x00007fcac7773d44, EFLAGS=0x0000000000010202, CSGSFS=0x0000000000000033, ERR=0x0000000000000004
+TRAPNO=0x000000000000000e
+</code></pre><p>通过查看，其中：</p>
+<pre><code>---------------  T H R E A D  ---------------
+
+Current thread (0x00007fcac0023800):  GCTaskThread [stack: 0x00007fcac4f42000,0x00007fcac5043000] [id=11785]
+
+siginfo:si_signo=SIGSEGV: si_errno=0, si_code=1 (SEGV_MAPERR), si_addr=0x00000000007d0038
+</code></pre><p>表明异常时正在运行<code>GCTaskThread</code> 垃圾回收线程，再看到后面还有一段：</p>
+<pre><code>VM Arguments:
+jvm_args: -XX:MaxPermSize=256m -XX:+HeapDumpOnOutOfMemoryError -Xmx1024m -Dfile.encoding=UTF-8 -Duser.country=CN -Duser.language=zh -Duser.variant 
+java_command: org.gradle.launcher.daemon.bootstrap.GradleDaemon 2.10
+Launcher Type: SUN_STANDARD
+</code></pre><p>似乎是内存不足引起的。</p>
+<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a><strong>问题解决</strong></h2><h3 id="一次解决"><a href="#一次解决" class="headerlink" title="一次解决"></a><strong>一次解决</strong></h3><p>尝试将 HeapSize 调大，在 app level的build.gradle中配置：</p>
+<pre><code>dexOptions {
+    preDexLibraries = false
+    javaMaxHeapSize &quot;4g&quot;   // 调大 HeapSize
 }
-</code></pre><p>这样debug或release apk就带有系统签名了。</p>
-<p>如果想直接<code>Run app</code>就是release版且带系统签名的apk，还需修改：</p>
-<p>1) 变体app</p>
-<p><img src="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:27/release_variant.png" alt=""></p>
-<p>2) 修改<code>buildTypes</code>：</p>
-<pre><code>buildTypes {
-    release {
-        minifyEnabled false
-        proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.txt&apos;
-        signingConfig signingConfigs.release
-    }
-}
-</code></pre><p>这样直接<code>Run app</code>就是带系统签名的release版apk了。</p>
-<p><strong>That’s all, Enjoy it!</strong></p>
+</code></pre><p>很遗憾，问题依然！ 那还原此修改，防止二次事故。</p>
+<h3 id="二次解决"><a href="#二次解决" class="headerlink" title="二次解决"></a><strong>二次解决</strong></h3><p>实在没办法，那尝试<code>重启大法</code>吧！</p>
+<p>当然，不是简单的重启，先要清除缓存再重启Android Studio。</p>
+<pre><code>Android Studio -&gt; File -&gt; Invalidate Caches / Restart ..
+</code></pre><p>最后，发现<code>重启大法</code>果然好用，居然顺利跑起来了，目前为止没有再出现该问题。</p>
+<h2 id="问题结果"><a href="#问题结果" class="headerlink" title="问题结果"></a><strong>问题结果</strong></h2><p>通过清除Android Studio缓存来解决该问题：</p>
+<p>在 Android Studio 的 <code>File</code> 菜单中选择 <code>Invalidate Caches / Restart ..</code>来清理缓存并重启Android Studio。</p>
+<pre><code>Android Studio -&gt; File -&gt; Invalidate Caches / Restart ..
+</code></pre><p>但个中缘由却并不清楚，暂且记录下来，望知情人士指教！</p>
+<p>That’s all!</p>
 <p><strong><center>原创文章，欢迎转载，转载请注明出处</center></strong></p>
-<p><strong><center>我的简书账号是ConnorLin，欢迎光临！</center></strong></p>
+<p><strong><center>我的简书账号是ConnorLin，欢迎关注！</center></strong></p>
 
       
     </div>
@@ -447,7 +462,7 @@ android:sharedUserId=&quot;android.media&quot;
       
         <div class="post-tags">
           
-            <a href="/tags/Android-Studio-Signature/" rel="tag">#Android Studio, Signature</a>
+            <a href="/tags/Android-Studio/" rel="tag">#Android Studio</a>
           
         </div>
       
@@ -456,17 +471,13 @@ android:sharedUserId=&quot;android.media&quot;
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/21/你真的了解Android-Notification吗/" rel="next" title="你真的了解Android Notification吗?">
-                <i class="fa fa-chevron-left"></i> 你真的了解Android Notification吗?
+              <a href="/2016/05/06/Markdown的常用语法(个人总结)/" rel="next" title="Markdown的常用语法(个人总结)">
+                <i class="fa fa-chevron-left"></i> Markdown的常用语法(个人总结)
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/04/28/使用Android-Studio-进行NDK开发和调试/" rel="prev" title="使用Android Studio 进行NDK开发和调试">
-                使用Android Studio 进行NDK开发和调试 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -518,8 +529,8 @@ android:sharedUserId=&quot;android.media&quot;
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/04/27/让Android-Studio支持系统签名(证书)/"
-           data-title="让Android Studio支持系统签名" data-url="https://github.com/ConnorLin/2016/04/27/让Android-Studio支持系统签名(证书)/">
+      <div class="ds-thread" data-thread-key="2016/05/07/Android-Studio-Run-app-报错/"
+           data-title="Android Studio Run app 报错" data-url="https://github.com/ConnorLin/2016/05/07/Android-Studio-Run-app-报错/">
       </div>
     
   </div>
@@ -628,7 +639,7 @@ android:sharedUserId=&quot;android.media&quot;
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用系统签名方式"><span class="nav-number">1.</span> <span class="nav-text">常用系统签名方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Android源码环境下签名"><span class="nav-number">1.1.</span> <span class="nav-text">Android源码环境下签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#手动重新签名"><span class="nav-number">1.2.</span> <span class="nav-text">手动重新签名</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#相关文件"><span class="nav-number">1.2.1.</span> <span class="nav-text">相关文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文件位置"><span class="nav-number">1.2.2.</span> <span class="nav-text">文件位置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#签名命令"><span class="nav-number">1.2.3.</span> <span class="nav-text">签名命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#步骤"><span class="nav-number">1.2.4.</span> <span class="nav-text">步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android-Studio系统签名"><span class="nav-number">2.</span> <span class="nav-text">Android Studio系统签名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#keytool-importkeypair"><span class="nav-number">2.1.</span> <span class="nav-text">keytool-importkeypair</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#相关文件-1"><span class="nav-number">2.2.</span> <span class="nav-text">相关文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#步骤-1"><span class="nav-number">2.3.</span> <span class="nav-text">步骤</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题分析"><span class="nav-number">2.</span> <span class="nav-text">问题分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题定位"><span class="nav-number">3.</span> <span class="nav-text">问题定位</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一次定位"><span class="nav-number">3.1.</span> <span class="nav-text">一次定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二次定位"><span class="nav-number">3.2.</span> <span class="nav-text">二次定位</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题解决"><span class="nav-number">4.</span> <span class="nav-text">问题解决</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一次解决"><span class="nav-number">4.1.</span> <span class="nav-text">一次解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二次解决"><span class="nav-number">4.2.</span> <span class="nav-text">二次解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题结果"><span class="nav-number">5.</span> <span class="nav-text">问题结果</span></a></li></ol></div>
             
           </div>
         </section>
