@@ -260,257 +260,6 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/27/让Android-Studio支持系统签名(证书)/" itemprop="url">
-                  让Android Studio支持系统签名
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-27T13:54:02+08:00" content="2016-04-27">
-              2016-04-27
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android-Studio/" itemprop="url" rel="index">
-                    <span itemprop="name">Android Studio</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/27/让Android-Studio支持系统签名(证书)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/27/让Android-Studio支持系统签名(证书)/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>有时候，我们开发的apk需要用到系统权限，需要在AndroidManifest.xml中添加共享系统进程属性：</p>
-<pre><code>android:sharedUserId=&quot;android.uid.system&quot;
-android:sharedUserId=&quot;android.uid.shared&quot;
-android:sharedUserId=&quot;android.media&quot;
-</code></pre><p>这时候apk的签名就需要是系统签名(platform、shared或media)才能正常使用。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/27/让Android-Studio支持系统签名(证书)/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/21/你真的了解Android-Notification吗/" itemprop="url">
-                  你真的了解Android Notification吗?
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-21T21:51:01+08:00" content="2016-04-21">
-              2016-04-21
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android-Notification/" itemprop="url" rel="index">
-                    <span itemprop="name">Android Notification</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/21/你真的了解Android-Notification吗/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/21/你真的了解Android-Notification吗/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！</p>
-<h3 id="什么是通知-Notification"><a href="#什么是通知-Notification" class="headerlink" title="什么是通知(Notification)"></a><strong>什么是通知(Notification)</strong></h3><p>通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。<br>通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。</p>
-<p>作为安卓用户界面的重要组成部分，通知有自己的设计指南。在Android 5.0(API level 21)中引入的 <a href="http://developer.android.com/training/material/index.html">Material Design</a> 的变化是特别重要的，更多信息请阅读 <a href="http://developer.android.com/design/patterns/notifications.html">通知设计指南</a>。</p>
-<h3 id="如何创建通知"><a href="#如何创建通知" class="headerlink" title="如何创建通知"></a><strong>如何创建通知</strong></h3><p>随着Android系统不断升级，Notification的创建方式也随之变化，主要变化如下:<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/04/21/你真的了解Android-Notification吗/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
                 <a class="post-title-link" href="/2016/04/15/Android应用使用Multidex突破64K方法数限制/" itemprop="url">
                   Android应用使用Multidex突破64K方法数限制
                 </a>
@@ -803,7 +552,7 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -811,7 +560,7 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -820,7 +569,7 @@ E/AndroidRuntime(10943):     at dalvik.system.NativeStart.main(Native Method)
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
