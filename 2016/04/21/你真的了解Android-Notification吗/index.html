@@ -97,7 +97,7 @@
 <meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/progress_bar_summary.png">
 <meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/activity_indicator.png">
 <meta property="og:image" content="https://github.com/ConnorLin/BlogImages/raw/master/2016:04:20/heads-up.png">
-<meta property="og:updated_time" content="2016-04-28T13:17:24.000Z">
+<meta property="og:updated_time" content="2016-08-26T14:54:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="你真的了解Android Notification吗?">
 <meta name="twitter:description" content="最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！
@@ -369,10 +369,9 @@ NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle(&quot;My notification&quot;)
             .setContentText(&quot;Hello World!&quot;)
-            .setContentIntent(contentIntent)
-            .build();
+            .setContentIntent(contentIntent);
 
-mNotifyMgr.notify(NOTIFICATIONS_ID, notification);
+mNotifyMgr.notify(NOTIFICATIONS_ID, mBuilder.build());
 </code></pre><p><em>注：除特别说明外，本文将根据 NotificationCompat.Builder() 展开解析，Notification.Builder()类似。</em></p>
 <h3 id="通知基本用法"><a href="#通知基本用法" class="headerlink" title="通知基本用法"></a><strong>通知基本用法</strong></h3><h4 id="通知的必要属性"><a href="#通知的必要属性" class="headerlink" title="通知的必要属性"></a><strong>通知的必要属性</strong></h4><p>一个通知必须包含以下三项属性:</p>
 <ul>

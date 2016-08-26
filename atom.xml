@@ -1274,7 +1274,7 @@ android:sharedUserId=&amp;quot;android.media&amp;quot;
     <link href="https://github.com/ConnorLin/2016/04/21/%E4%BD%A0%E7%9C%9F%E7%9A%84%E4%BA%86%E8%A7%A3Android-Notification%E5%90%97/"/>
     <id>https://github.com/ConnorLin/2016/04/21/你真的了解Android-Notification吗/</id>
     <published>2016-04-21T13:51:01.000Z</published>
-    <updated>2016-04-28T13:17:24.000Z</updated>
+    <updated>2016-08-26T14:54:55.000Z</updated>
     
     <content type="html">&lt;p&gt;最近时不时地有人问我这样或那样的通知如何实现，所以本文将根据个人经验对Notification做个总结，以供参考！&lt;/p&gt;
 &lt;h3 id=&quot;什么是通知-Notification&quot;&gt;&lt;a href=&quot;#什么是通知-Notification&quot; class=&quot;headerlink&quot; title=&quot;什么是通知(Notification)&quot;&gt;&lt;/a&gt;&lt;strong&gt;什么是通知(Notification)&lt;/strong&gt;&lt;/h3&gt;&lt;p&gt;通知是一个可以在应用程序正常的用户界面之外显示给用户的消息。&lt;br&gt;通知发出时，它首先出现在状态栏的通知区域中，用户打开通知抽屉可查看通知详情。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。&lt;/p&gt;
@@ -1309,10 +1309,9 @@ NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle(&amp;quot;My notification&amp;quot;)
             .setContentText(&amp;quot;Hello World!&amp;quot;)
-            .setContentIntent(contentIntent)
-            .build();
+            .setContentIntent(contentIntent);
 
-mNotifyMgr.notify(NOTIFICATIONS_ID, notification);
+mNotifyMgr.notify(NOTIFICATIONS_ID, mBuilder.build());
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;em&gt;注：除特别说明外，本文将根据 NotificationCompat.Builder() 展开解析，Notification.Builder()类似。&lt;/em&gt;&lt;/p&gt;
 &lt;h3 id=&quot;通知基本用法&quot;&gt;&lt;a href=&quot;#通知基本用法&quot; class=&quot;headerlink&quot; title=&quot;通知基本用法&quot;&gt;&lt;/a&gt;&lt;strong&gt;通知基本用法&lt;/strong&gt;&lt;/h3&gt;&lt;h4 id=&quot;通知的必要属性&quot;&gt;&lt;a href=&quot;#通知的必要属性&quot; class=&quot;headerlink&quot; title=&quot;通知的必要属性&quot;&gt;&lt;/a&gt;&lt;strong&gt;通知的必要属性&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;一个通知必须包含以下三项属性:&lt;/p&gt;
 &lt;ul&gt;
